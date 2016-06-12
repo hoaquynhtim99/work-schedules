@@ -14,4 +14,4 @@ Module lịch công tác tuần. Quản lý và hiển thị lịch công tác, 
 - Nút quản lý của admin hiển thị số công việc đăng ký.
 - Có thể đánh dấu công việc là nhấn mạnh hoặc bình thường.
 
-> Khuyến nghị nên chọn layout body (hoặc layout main) cho moduele
+> Khuyến nghị nên chọn layout body (hoặc layout main) cho module
