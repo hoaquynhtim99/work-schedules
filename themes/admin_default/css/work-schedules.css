@@ -1,0 +1,11 @@
+﻿.fa-required{
+    display: block;
+}
+.fa-required em{
+    font-size: 75%;
+}
+.list-none{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
