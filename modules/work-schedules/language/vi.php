@@ -61,6 +61,7 @@ $lang_module['ae_content'] = 'Nội dung';
 $lang_module['ae_element'] = 'Thành phần';
 $lang_module['ae_location'] = 'Địa điểm';
 $lang_module['ae_host'] = 'Chủ trì';
+$lang_module['ae_note'] = 'Ghi chú';
 $lang_module['ae_id_requires'] = 'Là phần bắt buộc nhập';
 
 $lang_module['ae_error_day'] = 'Nhập theo định dạng dd/mm/yyyy';

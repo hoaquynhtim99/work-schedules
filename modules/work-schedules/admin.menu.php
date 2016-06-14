@@ -12,5 +12,6 @@ if (!defined('NV_ADMIN'))
     die('Stop!!!');
 
 $submenu['config'] = $lang_module['config'];
+$submenu['config-display'] = $lang_module['cfgDisplay'];
 
-$allow_func = array('main', 'config');
+$allow_func = array('main', 'config', 'config-display');

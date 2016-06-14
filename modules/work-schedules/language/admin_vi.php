@@ -29,6 +29,16 @@ $lang_module['order'] = 'Thứ tự';
 $lang_module['status'] = 'Hoạt động';
 $lang_module['save'] = 'Lưu lại';
 
+$lang_module['e_element'] = 'Thành phần';
+$lang_module['e_location'] = 'Địa điểm';
+$lang_module['e_host'] = 'Chủ trì';
+$lang_module['e_note'] = 'Ghi chú';
+
 $lang_module['config'] = 'Quyền hạn người dùng';
 $lang_module['config_add'] = 'Ai được phép đăng ký lịch';
 $lang_module['config_edit'] = 'Ai được phép hiệu chỉnh lịch';
+
+$lang_module['cfgDisplay'] = 'Cấu hình hiển thị';
+$lang_module['cfgDisplay_field'] = 'Tiêu chí';  
+$lang_module['cfgDisplay_display'] = 'Hiển thị';
+$lang_module['cfgDisplay_require'] = 'Bắt buộc';

@@ -78,6 +78,12 @@
                 <input type="text" name="e_host" value="{DATA.e_host}" class="form-control required" maxlength="255" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="">
             </div>
         </div>
+        <div class="form-group">
+            <div>
+                <label>{LANG.ae_note}<span class="fa-required text-danger">(<i class="fa fa-asterisk"></i>)</span></label>
+                <textarea class="form-control required" name="e_note" rows="5" onkeypress="validErrorHidden(this);" data-mess="">{DATA.e_note}</textarea>
+            </div>
+        </div>
         <!-- BEGIN: status -->
         <div class="form-group">
             <div>

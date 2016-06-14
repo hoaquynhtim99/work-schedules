@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<form method="post" action="">
+<form method="post" action="{FORM_ACTION}">
     <div class="row">
         <div class="col-sm-12">
             <div class="panel panel-default">

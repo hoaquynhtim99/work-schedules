@@ -75,6 +75,7 @@ if (isset($array_op[1])) {
         'e_element' => '',
         'e_location' => '',
         'e_host' => '',
+        'e_note' => '',
         'event_textday' => '',
         'status' => defined('NV_IS_MANAGER_ADMIN') ? 1 : 2,
         'highlights' => 0
@@ -96,6 +97,7 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
     $array['e_element'] = $nv_Request->get_textarea('e_element', '', NV_ALLOWED_HTML_TAGS);
     $array['e_location'] = nv_substr($nv_Request->get_title('e_location', 'post', 0), 0, 255);
     $array['e_host'] = nv_substr($nv_Request->get_title('e_host', 'post', 0), 0, 255);
+    $array['e_note'] = $nv_Request->get_textarea('e_note', '', NV_ALLOWED_HTML_TAGS);
 
     $array['status'] = $nv_Request->get_int('status', 'post', 0);
     $array['highlights'] = $nv_Request->get_int('highlights', 'post', 0);
@@ -236,19 +238,20 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
 
     $array['e_content'] = nv_nl2br($array['e_content']);
     $array['e_element'] = nv_nl2br($array['e_element']);
+    $array['e_note'] = nv_nl2br($array['e_note']);
 
     if ($id) {
         $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET 
             edittime = ' . NV_CURRENTTIME . ', e_day = :e_day, e_month = :e_month, e_week = :e_week, e_year = :e_year, e_time = :e_time, e_shour = :e_shour, 
-            e_smin = :e_smin, e_ehour = :e_ehour, e_emin = :e_emin, e_content = :e_content, e_element = :e_element, e_location = :e_location, e_host = :e_host, status = :status, 
-            highlights = :highlights 
+            e_smin = :e_smin, e_ehour = :e_ehour, e_emin = :e_emin, e_content = :e_content, e_element = :e_element, e_location = :e_location, e_host = :e_host, 
+            e_note = :e_note, status = :status, highlights = :highlights 
         WHERE id = ' . $id;
     } else {
         $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (
-             post_id, addtime, edittime, e_day, e_month, e_week, e_year, e_time, e_shour, e_smin, e_ehour, e_emin, e_content, e_element, e_location, e_host, status, highlights
+             post_id, addtime, edittime, e_day, e_month, e_week, e_year, e_time, e_shour, e_smin, e_ehour, e_emin, e_content, e_element, e_location, e_host, e_note, status, highlights
         ) VALUES (
             ' . $user_info['userid'] . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', :e_day, :e_month, :e_week, :e_year, :e_time, :e_shour, :e_smin, :e_ehour, :e_emin, 
-            :e_content, :e_element, :e_location, :e_host, :status, :highlights
+            :e_content, :e_element, :e_location, :e_host, :e_note, :status, :highlights
         )';
     }
 
@@ -267,6 +270,7 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
         $sth->bindParam(':e_element', $array['e_element'], PDO::PARAM_STR, strlen($array['e_element']));
         $sth->bindParam(':e_location', $array['e_location'], PDO::PARAM_STR);
         $sth->bindParam(':e_host', $array['e_host'], PDO::PARAM_STR);
+        $sth->bindParam(':e_note', $array['e_note'], PDO::PARAM_STR, strlen($array['e_note']));
         $sth->bindParam(':status', $array['status'], PDO::PARAM_INT);
         $sth->bindParam(':highlights', $array['highlights'], PDO::PARAM_INT);
         $sth->execute();

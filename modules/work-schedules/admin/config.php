@@ -14,7 +14,10 @@ if (!defined('NV_IS_FILE_ADMIN'))
 $page_title = $lang_module['config'];
 
 $groups_list = nv_groups_list();
-$array = array('group_add' => array_map("trim", array_filter(array_unique(explode(',', $module_config[$module_name]['group_add'])))), 'group_edit' => array_map("trim", array_filter(array_unique(explode(',', $module_config[$module_name]['group_edit'])))));
+$array = array(
+    'group_add' => array_map("trim", array_filter(array_unique(explode(',', $module_config[$module_name]['group_add'])))),
+    'group_edit' => array_map("trim", array_filter(array_unique(explode(',', $module_config[$module_name]['group_edit']))))
+);
 
 if ($nv_Request->isset_request('submit', 'post')) {
     $array['group_add'] = $nv_Request->get_typed_array('group_add', 'post', 'int', array());
@@ -44,6 +47,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
 foreach ($groups_list as $group_id => $group_title) {
     $group_add = array(
