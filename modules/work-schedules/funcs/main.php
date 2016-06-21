@@ -242,7 +242,7 @@ if (defined('NV_IS_MANAGER_ADMIN')) {
     $numqueues = $db->query($sql)->fetchColumn();
 }
 
-$contents = nv_main_theme($array, $year, $week, $links, $numqueues);
+$contents = nv_main_theme($array, $year, $week, $links, $numqueues, $module_config[$module_name]);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

@@ -75,6 +75,7 @@ $lang_module['ae_error_e_content'] = 'Nội dung công việc chưa có hoặc q
 $lang_module['ae_error_e_element'] = 'Thành phần chưa có hoặc quá ngắn';
 $lang_module['ae_error_e_location'] = 'Địa điểm chưa có hoặc quá ngắn';
 $lang_module['ae_error_e_host'] = 'Người chủ trì chưa có hoặc quá ngắn';
+$lang_module['ae_error_e_note'] = 'Chưa nhập ghi chú cho lịch tuần';
 $lang_module['ae_error_status'] = 'Trạng thái công việc không hợp lệ';
 $lang_module['ae_success'] = 'Đăng ký lịch thành công, người quản lý sẽ kiểm tra thông tin bạn đăng ký trước khi nó được hiển thị';
 $lang_module['ae_info'] = 'Hoàn thành đầy đủ biểu mẫu dưới đây để đăng ký lịch tuần';

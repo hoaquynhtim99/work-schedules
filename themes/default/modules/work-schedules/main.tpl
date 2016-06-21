@@ -33,9 +33,10 @@
             <th class="text-center">{LANG.daytime}</th>
             <th class="text-center" style="white-space: nowrap;">{LANG.event_time}</th>
             <th class="text-center">{LANG.event_content}</th>
-            <th class="text-center">{LANG.event_element}</th>
-            <th class="text-center">{LANG.event_place}</th>
-            <th class="text-center">{LANG.event_host}</th>
+            <!-- BEGIN: display_element --><th class="text-center">{LANG.event_element}</th><!-- END: display_element -->
+            <!-- BEGIN: display_location --><th class="text-center">{LANG.event_place}</th><!-- END: display_location -->
+            <!-- BEGIN: display_host --><th class="text-center">{LANG.event_host}</th><!-- END: display_host -->
+            <!-- BEGIN: display_note --><th class="text-center">{LANG.ae_note}</th><!-- END: display_note -->
         </tr>
     </thead>
     <tbody>
@@ -56,9 +57,10 @@
                 <!-- END: edit -->
                 {ROW.e_content}
             </td>
-            <td class="middle{ROW.highlights}">{ROW.e_element}</td>
-            <td class="middle{ROW.highlights}">{ROW.e_location}</td>
-            <td class="middle{ROW.highlights}"><strong>{ROW.e_host}</strong></td>
+            <!-- BEGIN: display_element --><td class="middle{ROW.highlights}">{ROW.e_element}</td><!-- END: display_element -->
+            <!-- BEGIN: display_location --><td class="middle{ROW.highlights}">{ROW.e_location}</td><!-- END: display_location -->
+            <!-- BEGIN: display_host --><td class="middle{ROW.highlights}"><strong>{ROW.e_host}</strong></td><!-- END: display_host -->
+            <!-- BEGIN: display_note --><td class="middle{ROW.highlights}">{ROW.e_note}</td><!-- END: display_note -->
         </tr>
         <!-- END: loop -->
     </tbody>
@@ -78,12 +80,22 @@
         <div class="panel-body bg-{ROW.panel_type}">
             <div><strong>{ROW.etime}</strong>:</div>
             {ROW.e_content}
+            <!-- BEGIN: display_element -->
             <div class="gdl-divider gdl-border-x top margin-bottom margin-top"><div class="scroll-top"></div></div>
             <strong>{LANG.event_element}:</strong> {ROW.e_element}
+            <!-- END: display_element -->
+            <!-- BEGIN: display_location -->
             <div class="gdl-divider gdl-border-x top margin-bottom margin-top"><div class="scroll-top"></div></div>
             <strong>{LANG.event_place}:</strong> {ROW.e_location}
+            <!-- END: display_location -->
+            <!-- BEGIN: display_host -->
             <div class="gdl-divider gdl-border-x top margin-bottom margin-top"><div class="scroll-top"></div></div>
             <strong>{LANG.event_host}:</strong> <strong>{ROW.e_host}</strong>
+            <!-- END: display_host -->
+            <!-- BEGIN: display_note -->
+            <div class="gdl-divider gdl-border-x top margin-bottom margin-top"><div class="scroll-top"></div></div>
+            <strong>{LANG.ae_note}:</strong> <strong>{ROW.e_note}</strong>
+            <!-- END: display_note -->
         </div>
     </div>
     <!-- END: loop_mobile -->

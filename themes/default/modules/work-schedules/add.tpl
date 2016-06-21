@@ -60,30 +60,38 @@
                 <textarea class="form-control required" name="e_content" rows="5" onkeypress="validErrorHidden(this);" data-mess="">{DATA.e_content}</textarea>
             </div>
         </div>
+        <!-- BEGIN: display_element -->
         <div class="form-group">
             <div>
-                <label>{LANG.ae_element}<span class="fa-required text-danger">(<i class="fa fa-asterisk"></i>)</span></label>
-                <textarea class="form-control required" name="e_element" rows="5" onkeypress="validErrorHidden(this);" data-mess="">{DATA.e_element}</textarea>
+                <label>{LANG.ae_element}<!-- BEGIN: require_element1 --><span class="fa-required text-danger">(<i class="fa fa-asterisk"></i>)</span><!-- END: require_element1 --></label>
+                <textarea class="form-control<!-- BEGIN: require_element2 --> required<!-- END: require_element2 -->" name="e_element" rows="5" onkeypress="validErrorHidden(this);" data-mess="">{DATA.e_element}</textarea>
             </div>
         </div>
+        <!-- END: display_element -->
+        <!-- BEGIN: display_location -->
         <div class="form-group">
             <div>
-                <label>{LANG.ae_location}<span class="fa-required text-danger">(<i class="fa fa-asterisk"></i>)</span></label>
-                <input type="text" name="e_location" value="{DATA.e_location}" class="form-control required" maxlength="255" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="">
+                <label>{LANG.ae_location}<!-- BEGIN: require_location1 --><span class="fa-required text-danger">(<i class="fa fa-asterisk"></i>)</span><!-- END: require_location1 --></label>
+                <input type="text" name="e_location" value="{DATA.e_location}" class="form-control<!-- BEGIN: require_location2 --> required<!-- END: require_location2 -->" maxlength="255" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="">
             </div>
         </div>
+        <!-- END: display_location -->
+        <!-- BEGIN: display_host -->
         <div class="form-group">
             <div>
-                <label>{LANG.ae_host}<span class="fa-required text-danger">(<i class="fa fa-asterisk"></i>)</span></label>
-                <input type="text" name="e_host" value="{DATA.e_host}" class="form-control required" maxlength="255" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="">
+                <label>{LANG.ae_host}<!-- BEGIN: require_host1 --><span class="fa-required text-danger">(<i class="fa fa-asterisk"></i>)</span><!-- END: require_host1 --></label>
+                <input type="text" name="e_host" value="{DATA.e_host}" class="form-control<!-- BEGIN: require_host2 --> required<!-- END: require_host2 -->" maxlength="255" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="">
             </div>
         </div>
+        <!-- END: display_host -->
+        <!-- BEGIN: display_note -->
         <div class="form-group">
             <div>
-                <label>{LANG.ae_note}<span class="fa-required text-danger">(<i class="fa fa-asterisk"></i>)</span></label>
-                <textarea class="form-control required" name="e_note" rows="5" onkeypress="validErrorHidden(this);" data-mess="">{DATA.e_note}</textarea>
+                <label>{LANG.ae_note}<!-- BEGIN: require_note1 --><span class="fa-required text-danger">(<i class="fa fa-asterisk"></i>)</span><!-- END: require_note1 --></label>
+                <textarea class="form-control<!-- BEGIN: require_note2 --> required<!-- END: require_note2 -->" name="e_note" rows="5" onkeypress="validErrorHidden(this);" data-mess="">{DATA.e_note}</textarea>
             </div>
         </div>
+        <!-- END: display_note -->
         <!-- BEGIN: status -->
         <div class="form-group">
             <div>

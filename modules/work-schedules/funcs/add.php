@@ -19,6 +19,12 @@ if (defined('NV_IS_MANAGER_ADMIN')) {
     $page_title = $lang_module['ae_pagetitle'];
 }
 
+/**
+ * add_result()
+ * 
+ * @param mixed $array
+ * @return
+ */
 function add_result($array)
 {
     $string = json_encode($array);
@@ -184,7 +190,7 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
         );
     }
 
-    if (empty($array['e_element'])) {
+    if (empty($array['e_element']) and !empty($module_config[$module_name]['require_element'])) {
         die(add_result(array(
             'status' => 'error',
             'input' => 'e_element',
@@ -192,7 +198,7 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
         );
     }
 
-    if (empty($array['e_location'])) {
+    if (empty($array['e_location']) and !empty($module_config[$module_name]['require_location'])) {
         die(add_result(array(
             'status' => 'error',
             'input' => 'e_location',
@@ -200,11 +206,19 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
         );
     }
 
-    if (empty($array['e_host'])) {
+    if (empty($array['e_host']) and !empty($module_config[$module_name]['require_host'])) {
         die(add_result(array(
             'status' => 'error',
             'input' => 'e_host',
             'mess' => $lang_module['ae_error_e_host']))
+        );
+    }
+
+    if (empty($array['e_note']) and !empty($module_config[$module_name]['require_note'])) {
+        die(add_result(array(
+            'status' => 'error',
+            'input' => 'e_note',
+            'mess' => $lang_module['ae_error_e_note']))
         );
     }
 
@@ -309,7 +323,7 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
     );
 }
 
-$contents = nv_add_theme($array, $error, $form_action);
+$contents = nv_add_theme($array, $error, $form_action, $module_config[$module_name]);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

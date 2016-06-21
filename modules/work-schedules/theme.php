@@ -19,9 +19,10 @@ if (!defined('NV_MOD_WORK_SCHEDULES'))
  * @param mixed $week
  * @param mixed $links
  * @param mixed $numqueues
+ * @param mixed $cfg
  * @return
  */
-function nv_main_theme($array, $year, $week, $links, $numqueues)
+function nv_main_theme($array, $year, $week, $links, $numqueues, $cfg)
 {
     global $module_file, $lang_module, $module_info, $module_name;
 
@@ -83,10 +84,48 @@ function nv_main_theme($array, $year, $week, $links, $numqueues)
             if (defined('NV_IS_MANAGER_ADMIN')) {
                 $xtpl->parse('main.data.loop.edit');
             }
+            
+            // Các cấu hình hiển thị
+            if (!empty($cfg['display_element'])) {
+                $xtpl->parse('main.data.loop.display_element');
+                $xtpl->parse('main.data.loop_mobile.display_element');
+            }
+            
+            if (!empty($cfg['display_location'])) {
+                $xtpl->parse('main.data.loop.display_location');
+                $xtpl->parse('main.data.loop_mobile.display_location');
+            }
+            
+            if (!empty($cfg['display_host'])) {
+                $xtpl->parse('main.data.loop.display_host');
+                $xtpl->parse('main.data.loop_mobile.display_host');
+            }
+            
+            if (!empty($cfg['display_note'])) {
+                $xtpl->parse('main.data.loop.display_note');
+                $xtpl->parse('main.data.loop_mobile.display_note');
+            }    
 
             $xtpl->parse('main.data.loop');
             $xtpl->parse('main.data.loop_mobile');
         }
+    
+        // Các cấu hình hiển thị
+        if (!empty($cfg['display_element'])) {
+            $xtpl->parse('main.data.display_element');
+        }
+        
+        if (!empty($cfg['display_location'])) {
+            $xtpl->parse('main.data.display_location');
+        }
+        
+        if (!empty($cfg['display_host'])) {
+            $xtpl->parse('main.data.display_host');
+        }
+        
+        if (!empty($cfg['display_note'])) {
+            $xtpl->parse('main.data.display_note');
+        }    
 
         $xtpl->parse('main.data');
     }
@@ -190,9 +229,10 @@ function nv_info_theme($title, $message, $link, $type = 'info')
  * @param mixed $array
  * @param mixed $error
  * @param mixed $form_action
+ * @param mixed $cfg
  * @return
  */
-function nv_add_theme($array, $error, $form_action)
+function nv_add_theme($array, $error, $form_action, $cfg)
 {
     global $module_file, $lang_module, $module_info, $lang_global, $module_name, $op, $global_array_cat, $global_array_career, $global_array_location, $global_array_salary_type;
 
@@ -281,6 +321,39 @@ function nv_add_theme($array, $error, $form_action)
         $xtpl->parse('main.error');
     }
 
+    // Các cấu hình hiển thị, bắt buộc
+    if (!empty($cfg['display_element'])) {
+        if (!empty($cfg['require_element'])) {
+            $xtpl->parse('main.display_element.require_element1');
+            $xtpl->parse('main.display_element.require_element2');
+        }
+        $xtpl->parse('main.display_element');
+    }
+    
+    if (!empty($cfg['display_location'])) {
+        if (!empty($cfg['require_location'])) {
+            $xtpl->parse('main.display_location.require_location1');
+            $xtpl->parse('main.display_location.require_location2');
+        }
+        $xtpl->parse('main.display_location');
+    }
+    
+    if (!empty($cfg['display_host'])) {
+        if (!empty($cfg['require_host'])) {
+            $xtpl->parse('main.display_host.require_host1');
+            $xtpl->parse('main.display_host.require_host2');
+        }
+        $xtpl->parse('main.display_host');
+    }
+    
+    if (!empty($cfg['display_note'])) {
+        if (!empty($cfg['require_note'])) {
+            $xtpl->parse('main.display_note.require_note1');
+            $xtpl->parse('main.display_note.require_note2');
+        }
+        $xtpl->parse('main.display_note');
+    }    
+    
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
