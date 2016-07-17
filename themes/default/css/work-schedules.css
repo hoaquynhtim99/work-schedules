@@ -24,6 +24,10 @@
 .schedule-list thead{
     background: #eaeef3;
 }
+.schedule-list .week-head{
+    background: #428bca;
+    color: #fff;
+}
 .schedule-list tr{
     border-bottom: 1px #e4e4e4 solid;
 }
@@ -56,7 +60,14 @@
 .w300{
     width: 300px!important;
 }
-
+h2.week-head{
+    margin-bottom: 7px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid #ddd;
+}
+h3.dayweek-head{
+    margin-bottom: 7px;
+}
 .accom-detail-data{
     border: 1px #e4e4e4 solid;
     padding: 15px;
@@ -126,12 +137,12 @@
 /* RESPONSIVE */
 @media only screen and (max-width: 767px) {
 .schedule-list-mobile{ display: block; }
-.schedule-list-tool > .pull-left { margin-bottom: 10px; }
-.schedule-list-tool > .pull-left, 
-.schedule-list-tool > .pull-left .dropdown, 
-.schedule-list-tool > .pull-left .dropdown .dropdown-menu, 
-.schedule-list-tool > .pull-left .dropdown .btn{ width: 100%; }
-.schedule-list-tool > .pull-left .dropdown .btn{ overflow: hidden;}
+.schedule-list-tool > .pull-left { margin-bottom: 10px;width: 100%; }
+.schedule-list-tool > .pull-left > .btn-group { display: table; width: 100%;border-collapse: separate;table-layout: fixed; }
+.schedule-list-tool > .pull-left > .btn-group > .btn {display: table-cell;float: none;width: 40px;}
+.schedule-list-tool > .pull-left > .btn-group > .btn-group {display: table-cell;float: none;}
+.schedule-list-tool > .pull-left > .btn-group > .btn-group > .btn {width: 100%;}
+.schedule-list-tool > .pull-left > .btn-group > .btn-group > .dropdown-menu {width: 100%;}
 .schedule-list-tool > .pull-right{ width: 100%; text-align: center; }
 table.schedule-list{ display: none; }
 }

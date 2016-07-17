@@ -19,6 +19,8 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['week'] = 'Tuần';
+$lang_module['week_next'] = 'Tuần sau';
+$lang_module['week_prev'] = 'Tuần trước';
 $lang_module['schedule_empty'] = 'Chưa có lịch cho tuần này';
 $lang_module['schedule_empty_guide'] = 'Vui lòng chọn tuần khác để xem lịch. Nếu là người quản lý, nhấp vào nút Quản lý lịch để tạo lịch cho tuần này. Nếu thuộc các phòng ban liên quan, vui lòng nhấp vào nút đăng ký lịch';
 $lang_module['add'] = 'Đăng ký';

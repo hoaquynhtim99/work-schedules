@@ -24,6 +24,11 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $array['show_type'] = $global_array_show_type[0];
     }
     
+    // Set lại thời gian cron nếu thay đổi
+    if (!$array['auto_delete']) {
+        $array['cron_next_check'] = 0;
+    }
+    
     foreach ($array as $config_name => $config_value) {
         $sql = 'UPDATE ' . NV_CONFIG_GLOBALTABLE . ' SET config_value=:config_value 
         WHERE lang=' . $db->quote(NV_LANG_DATA) . ' AND module=' . $db->quote($module_name) . ' AND config_name=:config_name';

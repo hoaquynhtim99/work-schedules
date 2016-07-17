@@ -169,4 +169,17 @@ $(document).ready(function(){
             return 1;
         }
     });    
+    // Tooltip
+    $('[data-toggle="tooltip-week"]').tooltip({container: 'body'});
+    $('[data-toggle="tooltip-week"]').click(function() {
+        var value = $(this).data('value');
+        var mode = $(this).data('mode');
+        $('.schedules-week').each(function(k, v) {
+            if ($(this).text() == value) {
+                window.location = $($('.schedules-week')[(mode == 'next') ? k + 1 : k - 1]).find('a').prop('href');
+                return false;
+            }
+        });
+        
+    });
 });

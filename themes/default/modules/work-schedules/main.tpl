@@ -1,16 +1,22 @@
 <!-- BEGIN: main -->
 <div class="schedule-list-tool clearfix">
+    <!-- BEGIN: showweek -->
     <div class="pull-left">
-        <div class="dropdown">
-            <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
-                {LANG.week_stt} {CURRENT_WEEK.stt} ({CURRENT_WEEK.from} {LANG.to} {CURRENT_WEEK.to})
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <!-- BEGIN: week --><li><a href="{WEEK.link}">{LANG.week_stt} {WEEK.stt} ({WEEK.from} {LANG.to} {WEEK.to})</a></li><!-- END: week -->
-            </ul>
+        <div class="btn-group">
+            <a type="button" class="btn btn-warning" data-toggle="tooltip-week" data-mode="prev" data-value="{LANG.week_stt} {CURRENT_WEEK.stt} ({CURRENT_WEEK.from} {LANG.to} {CURRENT_WEEK.to})" title="{LANG.week_prev}"><i class="fa fa-step-backward" aria-hidden="true"></i></a>
+            <div class="btn-group">
+                <a class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {LANG.week_stt} {CURRENT_WEEK.stt} ({CURRENT_WEEK.from} {LANG.to} {CURRENT_WEEK.to})
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <!-- BEGIN: week --><li class="schedules-week"><a href="{WEEK.link}">{LANG.week_stt} {WEEK.stt} ({WEEK.from} {LANG.to} {WEEK.to})</a></li><!-- END: week -->
+                </ul>
+            </div>
+            <a type="button" class="btn btn-warning" data-toggle="tooltip-week" data-mode="next" data-value="{LANG.week_stt} {CURRENT_WEEK.stt} ({CURRENT_WEEK.from} {LANG.to} {CURRENT_WEEK.to})" title="{LANG.week_next}"><i class="fa fa-step-forward" aria-hidden="true"></i></a>
         </div>
     </div>
+    <!-- END: showweek -->
     <div class="pull-right">
         <a class="btn btn-info btn-sm" href="{LINK_ADD}"><i class="fa fa-plus"></i> {LANG_ADD}</a>
         <a class="btn btn-info btn-sm" href="{LINK_MANAGER}"><i class="fa fa-briefcase"></i> {LANG.manager}<!-- BEGIN: numqueues --> (<strong>{NUMQUEUES}</strong>)<!-- END: numqueues --></a>
@@ -41,6 +47,11 @@
     </thead>
     <tbody>
         <!-- BEGIN: loop -->
+        <!-- BEGIN: week -->
+        <tr>
+            <th colspan="10" class="week-head">{LANG.week} {THISWEEK}</th>
+        </tr>
+        <!-- END: week -->
         <tr>
             <!-- BEGIN: first_col -->
             <td class="text-center middle"<!-- BEGIN: rowspan --> rowspan="{NUMROWS}"<!-- END: rowspan -->>
@@ -67,14 +78,11 @@
 </table>
 <div class="schedule-list-mobile">
     <!-- BEGIN: loop_mobile -->
+    <!-- BEGIN: week -->
+    <h2 class="week-head">{LANG.week} {THISWEEK}</h2>
+    <!-- END: week -->
     <!-- BEGIN: title -->
-    <div class="gdl-header-wrapper">
-        <div class="gdl-header-left-bar"></div>
-        <div class="gdl-header-left-bar"></div>
-        <h3 class="gdl-header-title">{DAYOFWEEK} <em>({DAYTEXT})</em></h3>
-        <div class="gdl-header-divider"></div>
-        <div class="clear"></div>
-    </div>
+    <h3 class="dayweek-head">{DAYOFWEEK} <em>({DAYTEXT})</em></h3>
     <!-- END: title -->
     <div class="panel panel-{ROW.panel_type}">
         <div class="panel-body bg-{ROW.panel_type}">
@@ -101,10 +109,12 @@
     <!-- END: loop_mobile -->
 </div>
 <!-- END: data -->
+<!-- BEGIN: showweek_note -->
 <div class="alert alert-info">
     <div class="message-box-title"><i class="fa fa-info-circle"></i> {LANG.event_note}</div>
     <div class="message-box-content">
         {LANG.event_note_detail}
     </div>
 </div>
+<!-- END: showweek_note -->
 <!-- END: main -->

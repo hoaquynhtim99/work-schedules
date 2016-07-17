@@ -21,25 +21,8 @@ if (isset($array_op[2])) {
 
 $is_print = false;
 $is_download = false;
-
+$week = nv_get_week_from_time(NV_CURRENTTIME);
 $year = date('Y');
-$time_per_week = 86400 * 7;
-$time_start_year = mktime(0, 0, 0, 1, 1, $year);
-;
-$time_first_week = $time_start_year - (86400 * (date('N', $time_start_year) - 1));
-//$week = intval( date('W') );  // Tuần theo chuẩn này sai
-$week = 1; // Tuần bắt đầu từ 1
-
-// Xác định tuần bắt đầu từ tuần đầu tiên trừ ra
-for ($i = 0; $i <= 51; $i++) {
-    $week_begin = $time_first_week + $i * $time_per_week;
-    $week_next = $week_begin + $time_per_week;
-
-    if ($week_begin <= NV_CURRENTTIME and $week_next > NV_CURRENTTIME) {
-        $week = $i + 1;
-        break;
-    }
-}
 
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
@@ -48,7 +31,7 @@ if (isset($array_op[0])) {
         $is_print = true;
     } elseif ($array_op[0] == 'download') {
         $is_download = true;
-    } else {
+    } elseif ($module_config[$module_name]['show_type'] == 'week') {
         $valid = false;
         $link .= '&amp;' . NV_OP_VARIABLE . '=';
 
@@ -80,6 +63,9 @@ if (isset($array_op[0])) {
             header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true));
             die();
         }
+    } else {
+        header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true));
+        die();
     }
 }
 
@@ -97,24 +83,36 @@ if (isset($array_op[1])) {
 $links = array(
     'print' => $link . '/print',
     'download' => $link . '/download',
-    );
+);
 
 $array = array();
 $time_per_week = 86400 * 7;
 $time_start_year = mktime(0, 0, 0, 1, 1, $year);
-;
 $time_first_week = $time_start_year - (86400 * (date('N', $time_start_year) - 1));
 
 $week_begin = $time_first_week + ($week - 1) * $time_per_week;
 $week_next = $week_begin + $time_per_week;
 
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE e_time >= ' . $week_begin . ' AND e_time < ' . $week_next . ' AND status = 1 ORDER BY e_time ASC';
-$result = $db->query($sql);
+if ($module_config[$module_name]['show_type'] == 'week') {
+    // Lịch công tác theo tuần
+    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE e_time >= ' . $week_begin . ' AND e_time < ' . $week_next . ' AND status = 1 ORDER BY e_time ASC';
+    $result = $db->query($sql);
+} else {
+    // Tất cả lịch công tác
+    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status = 1 ORDER BY e_time DESC LIMIT 200';
+    $result = $db->query($sql);
+}
 
 while ($row = $result->fetch()) {
     $row['url_edit'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add/edit-' . $row['id'];
 
-    $array[] = $row;
+    $array[nv_get_week_from_time($row['e_time'])][] = $row;
+}
+
+if ($module_config[$module_name]['show_type'] != 'week') {
+    foreach ($array as $_week => $_weekData) {
+        krsort($array[$_week]);
+    }
 }
 
 if ($is_download) {
