@@ -18,3 +18,5 @@ if (defined('NV_IS_SPADMIN')) {
 } elseif (defined('NV_IS_USER') and !empty($module_info['admins']) and !empty($user_info['userid']) and in_array($user_info['userid'], explode(',', $module_info['admins']))) {
     define('NV_IS_MANAGER_ADMIN', true);
 }
+
+require NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';

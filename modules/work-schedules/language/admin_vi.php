@@ -42,3 +42,16 @@ $lang_module['cfgDisplay'] = 'Cấu hình hiển thị';
 $lang_module['cfgDisplay_field'] = 'Tiêu chí';  
 $lang_module['cfgDisplay_display'] = 'Hiển thị';
 $lang_module['cfgDisplay_require'] = 'Bắt buộc';
+
+$lang_module['cfgSYS'] = 'Thiết lập hệ thống';
+$lang_module['cfgSYS_cron'] = 'Tiến trình tự động';
+$lang_module['cfgSYS_theme'] = 'Thiết lập giao diện';
+$lang_module['cfgSYS_show_type'] = 'Kiểu hiển thị';
+$lang_module['cfgSYS_show_type_week'] = 'Theo tuần';
+$lang_module['cfgSYS_show_type_all'] = 'Tất cả';
+$lang_module['cfgSYS_show_type_all_note'] = 'Chú ý: Để đảm bảo an toàn cho CSDL cũng như người dùng, nếu chọn kiểu hiển thị lịch là <strong>Tất cả</strong> hãy bật chức năng <strong>Tự động xóa lịch</strong>. Hệ thống sẽ tự động giới hạn hiển thị số mục lịch trong phạm vi 200 mục';
+$lang_module['cfgSYS_auto_delete'] = 'Tự động xóa lịch cũ';
+$lang_module['cfgSYS_auto_delete_time'] = 'Xóa lịch sau';
+$lang_module['cfgSYS_cron_interval'] = 'Tần số kiểm tra xóa';
+$lang_module['cfgSYS_cron_interval_per'] = 'một lần';
+$lang_module['cfgSYS_cron_interval_note'] = 'Chú ý: Thời gian lặp lại tính từ khi có người truy cập vào khu vực lịch công tác, không phải là thời gian thực của máy chủ';

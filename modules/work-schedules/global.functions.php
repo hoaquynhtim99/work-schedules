@@ -8,11 +8,7 @@
  * @Createdate Sat, 11 Jun 2016 23:45:51 GMT
  */
 
-if (!defined('NV_ADMIN'))
+if (!defined('NV_MAINFILE'))
     die('Stop!!!');
 
-$submenu['config'] = $lang_module['config'];
-$submenu['config-display'] = $lang_module['cfgDisplay'];
-$submenu['config-sys'] = $lang_module['cfgSYS'];
-
-$allow_func = array('main', 'config', 'config-display', 'config-sys');
+$global_array_show_type = array('week', 'all');
