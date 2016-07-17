@@ -1,37 +1,20 @@
-# work-schedules
-Module lịch công tác tuần. Quản lý và hiển thị lịch công tác, hỗ trợ cả trình duyệt desktop, mobile, tablet.
+# Hướng dẫn cập nhật module work-schedules lên phiên bản 4.0.30
 
-**Chức năng admin:**
+Gói cập nhật này hỗ trợ các module work-schedules sau: 4.0.29
+Gói câp nhật này chạy trên NukeViet 4.0.29 nên cần nâng cấp NukeViet lên 4.0.29 trước (Xem hướng dẫn cập nhật tại https://github.com/nukeviet/update/tree/to-4.0.29)
 
-- Cấu hình quyền đăng ký lịch
-- Cấu hình quyền hiệu chỉnh lịch
-- Cấu hình kiểu hiển thị lịch (tất cả, theo tuần)
-- Cấu hình tiến trình tự động xóa lịch cũ
-- Chọn các trường dữ liệu sẽ hiển thị và bắt buộc nhập
+## Bước 1: Cập nhật module
 
-**Chức năng ngoài site:**
+### Tùy chọn 1: Cập nhật tự động
 
-- Hiển thị lịch theo tuần với nội dung: Thứ ngày, thời gian, nội dung, thành phần, địa điểm, chủ trì, ghi chú (tùy theo cấu hình).
-- Hiển thị tất cả lịch (tùy theo cấu hình)
-- Đối với admin có nút thêm và quản lý lịch
-- Đối với thành viên thuộc nhóm có quyền đăng ký lịch có nút đăng ký
-- Nút quản lý của admin hiển thị số công việc đăng ký.
-- Có thể đánh dấu công việc là nhấn mạnh hoặc bình thường.
+Đăng nhập vào quản trị site, vào khu vực Công cụ web => Kiểm tra phiên bản, nếu tại đây có thông báo cần cập nhật module, nhấp vào đó để thực hiện cập nhật tự động. Nếu thất bại hãy thử tùy chọn bên dưới.
 
-> Khuyến nghị nên chọn layout body (hoặc layout main) cho module
+### Tùy chọn 2: Cập nhật thủ công
 
-## Changelogs
-### V4.0.30
-- Bổ sung nút tuần trước và tuần sau ngoài site
-- Thêm cấu hình kiểu hiển thị lịch (tất cả, theo tuần)
-- Thêm cấu hình tiến trình tự động xóa lịch cũ
-- Thêm cấu hình các trường dữ liệu hiển thị
+Tải gói cập nhật tại https://github.com/hoaquynhtim99/work-schedules-update/releases/download/4.0.29/update_work-schedules_to4.0.29.zip, sau đó giải nén và upload lên site đúng cấu trúc (thư mục install nhập vào thư mục install trên website).
+Đăng nhập quản trị tối cao, nhận được thông báo cập nhật, nhấp vào link để thực hiện cập nhật.
 
-### V4.0.29
-- Các chức năng cơ bản của module phát hành
+## Bước 2: Sau cập nhật
 
-## Nhà tài trợ
-
-Xin cảm ơn các nhà tài trợ sau đã đóng góp để phát triển module này:
-
-- Vũ Ngọc Thanh (https://www.facebook.com/NgocThanhICT)
+Vào phần cấu hình của module, thiết lập lại các giá trị cấu hình và lưu lại.
+Các vấn đề phát sinh thảo luận tại https://github.com/hoaquynhtim99/work-schedules-update/issues
