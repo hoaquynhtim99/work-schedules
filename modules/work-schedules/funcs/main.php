@@ -21,8 +21,9 @@ if (isset($array_op[2])) {
 
 $is_print = false;
 $is_download = false;
-$week = nv_get_week_from_time(NV_CURRENTTIME);
-$year = date('Y');
+$real_week = nv_get_week_from_time(NV_CURRENTTIME);
+$week = $real_week[0];
+$year = $real_week[1];
 
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
@@ -37,8 +38,9 @@ if (isset($array_op[0])) {
 
         if (preg_match("/^" . preg_quote(change_alias($lang_module['week'])) . "\-([0-9]{1,2})$/", $array_op[0], $m)) {
             $m[1] = intval($m[1]);
+            $num_week = nv_get_max_week_of_year($year);
 
-            if ($m[1] > 0 and $m[1] < 53) {
+            if ($m[1] > 0 and $m[1] < $num_week) {
                 $valid = true;
                 $week = $m[1];
                 $link .= change_alias($lang_module['week']) . '-' . $week;
@@ -48,8 +50,9 @@ if (isset($array_op[0])) {
         } elseif (preg_match("/^" . preg_quote(change_alias($lang_module['week'])) . "\-([0-9]{1,2})\-([0-9]{4})$/", $array_op[0], $m)) {
             $m[1] = intval($m[1]);
             $m[2] = intval($m[2]);
-
-            if ($m[1] > 0 and $m[1] < 53 and $m[2] > 1699 and $m[2] < 2101) {
+            $num_week = nv_get_max_week_of_year($m[2]);
+            
+            if ($m[1] > 0 and $m[1] <= $num_week and $m[2] > 1699 and $m[2] < 2101) {
                 $valid = true;
                 $week = $m[1];
                 $year = $m[2];
@@ -106,7 +109,8 @@ if ($module_config[$module_name]['show_type'] == 'week') {
 while ($row = $result->fetch()) {
     $row['url_edit'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add/edit-' . $row['id'];
 
-    $array[nv_get_week_from_time($row['e_time'])][] = $row;
+    $real_week = nv_get_week_from_time($row['e_time']);
+    $array[$real_week[0]][] = $row;
 }
 
 if ($module_config[$module_name]['show_type'] != 'week') {

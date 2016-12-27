@@ -45,22 +45,49 @@ if ($module_config[$module_name]['auto_delete'] and (empty($module_config[$modul
  */
 function nv_get_week_from_time($time)
 {
-    $week = 1; // Tuần bắt đầu từ 1
+    $week = 1;
     $year = date('Y', $time);
+    $real_week = array($week, $year);
+    
     $time_per_week = 86400 * 7;
     $time_start_year = mktime(0, 0, 0, 1, 1, $year);
     $time_first_week = $time_start_year - (86400 * (date('N', $time_start_year) - 1));
     
-    // Xác định tuần bắt đầu từ tuần đầu tiên trừ ra
-    for ($i = 0; $i <= 51; $i++) {
+    $addYear = true;
+    $num_week_loop = nv_get_max_week_of_year($year) - 1;
+    
+    for ($i = 0; $i <= $num_week_loop; $i++) {
         $week_begin = $time_first_week + $i * $time_per_week;
         $week_next = $week_begin + $time_per_week;
     
         if ($week_begin <= $time and $week_next > $time) {
-            $week = $i + 1;
+            $real_week[0] = $i + 1;
+            $addYear = false;
             break;
         }
     }
+    if ($addYear) {
+        $real_week[1] = $real_week[1] + 1;
+    }
     
-    return $week;
+    return $real_week;
+}
+
+/**
+ * nv_get_max_week_of_year()
+ * 
+ * @param mixed $year
+ * @return
+ */
+function nv_get_max_week_of_year($year)
+{
+    $time_per_week = 86400 * 7;
+    $time_start_year = mktime(0, 0, 0, 1, 1, $year);
+    $time_first_week = $time_start_year - (86400 * (date('N', $time_start_year) - 1));
+    
+    if (date('Y', $time_first_week + ($time_per_week * 53) - 1) == $year) {
+        return 53;
+    } else {
+        return 52;
+    }
 }
