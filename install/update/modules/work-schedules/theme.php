@@ -141,24 +141,27 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg)
 
     if ($module_config[$module_name]['show_type'] == 'week') {
         // Xuất tuần (Lấy ngày đầu của năm trừ ra)
-        $this_year = date('Y');
+        $real_week = nv_get_week_from_time(NV_CURRENTTIME);
+        $this_year = $real_week[1];
         $time_per_week = 86400 * 7;
         $time_start_year = mktime(0, 0, 0, 1, 1, $year);
         $time_first_week = $time_start_year - (86400 * (date('N', $time_start_year) - 1));
     
         // Thêm tuần cuối năm trước
+        $num_week_before = nv_get_max_week_of_year($year - 1);
         $row = array(
-            'stt' => 52,
+            'stt' => $num_week_before,
             'from' => nv_date('d/m/Y', $time_first_week - $time_per_week),
             'to' => nv_date('d/m/Y', $time_first_week - 1),
-            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . change_alias($lang_module['week']) . '-52-' . ($year - 1)
+            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . change_alias($lang_module['week']) . '-' . $num_week_before . '-' . ($year - 1)
         );
     
         $xtpl->assign('WEEK', $row);
         $xtpl->parse('main.showweek.week');
     
         // Các tuần trong năm
-        for ($i = 0; $i <= 51; $i++) {
+        $num_week_loop = nv_get_max_week_of_year($year) - 1;
+        for ($i = 0; $i <= $num_week_loop; $i++) {
             $row = array(
                 'stt' => $i + 1,
                 'from' => nv_date('d/m/Y', $time_first_week + $i * $time_per_week),
@@ -171,10 +174,11 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg)
         }
     
         // Thêm tuần đầu năm sau
+        $num_week = nv_get_max_week_of_year($year);
         $row = array(
             'stt' => 1,
-            'from' => nv_date('d/m/Y', $time_first_week + 52 * $time_per_week),
-            'to' => nv_date('d/m/Y', $time_first_week + 52 * $time_per_week + $time_per_week - 1),
+            'from' => nv_date('d/m/Y', $time_first_week + $num_week * $time_per_week),
+            'to' => nv_date('d/m/Y', $time_first_week + $num_week * $time_per_week + $time_per_week - 1),
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . change_alias($lang_module['week']) . '-1-' . ($year + 1)
         );
     

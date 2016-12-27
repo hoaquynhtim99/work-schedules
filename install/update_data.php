@@ -17,17 +17,17 @@ $nv_update_config = array();
 $nv_update_config['type'] = 1;
 
 // ID goi cap nhat
-$nv_update_config['packageID'] = 'NVUDWORKSCHEDULES4030';
+$nv_update_config['packageID'] = 'NVUDWORKSCHEDULES4100';
 
 // Cap nhat cho module nao, de trong neu la cap nhat NukeViet, ten thu muc module neu la cap nhat module
 $nv_update_config['formodule'] = 'work-schedules';
 
 // Thong tin phien ban, tac gia, ho tro
-$nv_update_config['release_date'] = 1468751381;
+$nv_update_config['release_date'] = 1482812754;
 $nv_update_config['author'] = 'PHAN TAN DUNG (phantandung92@gmail.com)';
-$nv_update_config['support_website'] = 'https://github.com/hoaquynhtim99/work-schedules/tree/to-4.0.30';
-$nv_update_config['to_version'] = '4.0.30';
-$nv_update_config['allow_old_version'] = array('4.0.29');
+$nv_update_config['support_website'] = 'https://github.com/hoaquynhtim99/work-schedules/tree/to-4.1.00';
+$nv_update_config['to_version'] = '4.1.00';
+$nv_update_config['allow_old_version'] = array('4.0.29', '4.0.30');
 
 // 0:Nang cap bang tay, 1:Nang cap tu dong, 2:Nang cap nua tu dong
 $nv_update_config['update_auto_type'] = 1;
@@ -47,7 +47,7 @@ $nv_update_config['tasklist'][] = array(
     'f' => 'nv_up_p1'
 );
 $nv_update_config['tasklist'][] = array(
-    'r' => '4.0.30',
+    'r' => '4.1.00',
     'rq' => 1,
     'l' => 'nv_up_finish',
     'f' => 'nv_up_finish'
@@ -181,13 +181,13 @@ function nv_up_finish()
 
     try {
         $num = $db->query("SELECT COUNT(*) FROM " . $db_config['prefix'] . "_setup_extensions WHERE basename='" . $nv_update_config['formodule'] . "' AND type='module'")->fetchColumn();
-        $version = "4.0.30 1468751381";
+        $version = $nv_update_config['to_version'] . " " . $nv_update_config['release_date'];
         
         if (!$num) {
             $db->query("INSERT INTO " . $db_config['prefix'] . "_setup_extensions (
                 id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note
             ) VALUES (
-                324, 'module', 'work-schedules', 0, 1, 'work-schedules', 'work_schedules', '4.0.30 1468751381', " . NV_CURRENTTIME . ", 'PHAN TAN DUNG (phantandung92@gmail.com)', 
+                324, 'module', 'work-schedules', 0, 1, 'work-schedules', 'work_schedules', '" . $version . "', " . NV_CURRENTTIME . ", 'PHAN TAN DUNG (phantandung92@gmail.com)', 
                 'Module lịch công tác tuần'
             )");
         } else {
