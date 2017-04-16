@@ -11,7 +11,7 @@
 if (!defined('NV_MOD_WORK_SCHEDULES'))
     die('Stop!!!');
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 
 if (isset($array_op[2])) {

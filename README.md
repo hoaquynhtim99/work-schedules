@@ -21,13 +21,24 @@ Module lịch công tác tuần. Quản lý và hiển thị lịch công tác, 
 > Khuyến nghị nên chọn layout body (hoặc layout main) cho module
 
 ## Changelogs
+
+### V4.1.01
+
+- Chạy trên NukeViet 4.1.01
+
+### V4.1.00
+
+- Hỗ trợ NukeViet 4.1.00
+
 ### V4.0.30
+
 - Bổ sung nút tuần trước và tuần sau ngoài site
 - Thêm cấu hình kiểu hiển thị lịch (tất cả, theo tuần)
 - Thêm cấu hình tiến trình tự động xóa lịch cũ
 - Thêm cấu hình các trường dữ liệu hiển thị
 
 ### V4.0.29
+
 - Các chức năng cơ bản của module phát hành
 
 ## Nhà tài trợ

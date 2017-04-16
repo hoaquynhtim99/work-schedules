@@ -24,9 +24,9 @@ if (!defined('NV_MOD_WORK_SCHEDULES'))
  */
 function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg)
 {
-    global $module_file, $lang_module, $module_info, $module_name, $module_config;
+    global $lang_module, $module_info, $module_name, $module_config;
 
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
 
     $xtpl->assign('LINK_ADD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add');
@@ -221,9 +221,9 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg)
  */
 function nv_info_theme($title, $message, $link, $type = 'info')
 {
-    global $module_file, $lang_module, $module_info;
+    global $lang_module, $module_info;
 
-    $xtpl = new XTemplate('info.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('info.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('TITLE', $title);
     $xtpl->assign('MESSAGE', $message);
@@ -250,9 +250,9 @@ function nv_info_theme($title, $message, $link, $type = 'info')
  */
 function nv_add_theme($array, $error, $form_action, $cfg)
 {
-    global $module_file, $lang_module, $module_info, $lang_global, $module_name, $op, $global_array_cat, $global_array_career, $global_array_location, $global_array_salary_type;
+    global $lang_module, $module_info, $lang_global, $module_name, $op, $global_array_cat, $global_array_career, $global_array_location, $global_array_salary_type, $global_config;
 
-    $xtpl = new XTemplate('add.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('add.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('FORM_ACTION', $form_action);
@@ -290,15 +290,23 @@ function nv_add_theme($array, $error, $form_action, $cfg)
         $xtpl->assign('INFO', $lang_module['ae_info']);
 
         // Mã bảo mật nếu không là người quản lý
-        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-        $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-        $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-        $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/refresh.png');
-        $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
-        $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
+        if ($global_config['captcha_type'] == 2) {
+            $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+            $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+            $xtpl->parse('main.recaptcha');
+        } else {
+            $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+            $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+            $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+            $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
+            $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/refresh.png');
+            $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
+            $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
+    
+            $xtpl->parse('main.captcha');
+        }
 
-        $xtpl->parse('main.captcha');
+            
         $xtpl->parse('main.disable_oldday');
     }
 
@@ -385,9 +393,9 @@ function nv_add_theme($array, $error, $form_action, $cfg)
  */
 function nv_manager_list_theme($array, $array_users, $generate_page, $array_list_action)
 {
-    global $module_file, $lang_module, $module_info, $lang_global;
+    global $lang_module, $module_info, $lang_global;
 
-    $xtpl = new XTemplate('manager-list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('manager-list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 

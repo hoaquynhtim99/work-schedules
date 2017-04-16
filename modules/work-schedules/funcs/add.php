@@ -232,14 +232,18 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
 
     // Mã bảo mật
     if (!defined('NV_IS_MANAGER_ADMIN')) {
-        $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+        if ($global_config['captcha_type'] == 2) {
+            $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+        } else {
+            $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+        }
         $check_seccode = nv_capcha_txt($nv_seccode) ? true : false;
 
         if (!$check_seccode) {
             die(add_result(array(
                 'status' => 'error',
                 'input' => 'nv_seccode',
-                'mess' => $lang_global['securitycodeincorrect']))
+                'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'])))
             );
         }
     }

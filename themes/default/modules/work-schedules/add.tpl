@@ -121,6 +121,20 @@
             </div>
         </div>
         <!-- END: captcha -->
+        <!-- BEGIN: recaptcha -->
+        <div class="form-group">
+            <div class="middle text-center clearfix">
+                <label class="control-label">{N_CAPTCHA}</label>
+                <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
+                <script type="text/javascript">
+                nv_recaptcha_elements.push({
+                    id: "{RECAPTCHA_ELEMENT}",
+                    btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent())
+                })
+                </script>
+            </div>
+        </div>
+        <!-- END: recaptcha -->
         <div class="form-group">
             <div class="text-center">
                 <input type="submit" name="submit" value="{GLANG.submit}" class="btn btn-warning">
