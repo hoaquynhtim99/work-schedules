@@ -6,7 +6,7 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
-function validErrorShow(a) {
+function ws_validErrorShow(a) {
     $(a).parent().parent().addClass("has-error");
     $("[data-mess]", $(a).parent().parent().parent()).not(".tooltip-current").tooltip("destroy");
     $(a).tooltip({
@@ -20,26 +20,27 @@ function validErrorShow(a) {
     "DIV" == $(a).prop("tagName") && $("input", a)[0].focus()
 }
 
-function validCheck(a) {
+function ws_validCheck(a) {
     var c = $(a).attr("data-pattern"),
         d = $(a).val(),
         b = $(a).prop("tagName"),
         e = $(a).prop("type");
     if ("INPUT" == b && "email" == e) {
-        if (!nv_mailfilter.test(d)) return !1
+        if (!nv_mailfilter.test(d)) return !1;
     } else if ("SELECT" == b) {
-        if (!$("option:selected", a).length) return !1
+        if (typeof $(a).data('empty') != 'undefined' && d == $(a).data('empty')) return !1;
+        if (!$("option:selected", a).length) return !1;
     } else if ("DIV" == b && $(a).is(".radio-box")) {
-        if (!$("[type=radio]:checked", a).length) return !1
+        if (!$("[type=radio]:checked", a).length) return !1;
     } else if ("DIV" == b && $(a).is(".check-box")) {
-        if (!$("[type=checkbox]:checked", a).length) return !1
+        if (!$("[type=checkbox]:checked", a).length) return !1;
     } else if ("INPUT" == b || "TEXTAREA" == b) if ("undefined" == typeof c || "" == c) {
-        if ("" == d) return !1
+        if ("" == d) return !1;
     } else if (a = c.match(/^\/(.*?)\/([gim]*)$/), !(a ? new RegExp(a[1], a[2]) : new RegExp(c)).test(d)) return !1;
-    return !0
+    return !0;
 }
 
-function validErrorHidden(a, b) {
+function ws_validErrorHidden(a, b) {
     if (!b) b = 2;
     b = parseInt(b);
     var c = $(a),
@@ -52,48 +53,88 @@ function validErrorHidden(a, b) {
     c.removeClass("has-error")
 }
 
-function formErrorHidden(a) {
+function ws_formErrorHidden(a) {
     $(".has-error", a).removeClass("has-error");
     $("[data-mess]", a).tooltip("destroy")
 }
 
-function validReset(a) {
-    var d = $(".nv-info", a).attr("data-default");
-    if (!d) d = $(".nv-info-default", a).html();
-    $(".nv-info", a).removeClass("error success").html(d);
-    formErrorHidden(a);
-    $("input,button,select,textarea", a).prop("disabled", !1);
-    $(a)[0].reset()
+function ws_add_validForm(form) {
+    $(".has-error", form).removeClass("has-error");
+    $(".tooltip-current", form).removeClass("tooltip-current");
+    var isError = false,
+        formData = [];
+    $(form).find(".required").each(function() {
+        if ($(this).prop("type") == 'password') {
+            $(this).val(trim(strip_tags($(this).val())));
+        }
+        if (!ws_validCheck(this)) {
+            isError = true;
+            $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess"));
+            ws_validErrorShow(this);
+            return false;
+        }
+    });
+    if (!isError) {
+        formData.type = $(form).prop("method");
+        formData.url = $(form).prop("action");
+        formData.data = $(form).serialize();
+        ws_formErrorHidden(form);
+        $(form).find("input,button,select,textarea").prop("disabled", true);
+        $.ajax({
+            type: formData.type,
+            cache: false,
+            url: formData.url,
+            data: formData.data,
+            dataType: "json",
+            success: function(res) {
+                var btn = $("[onclick*='change_captcha']", form);
+                if (btn.length) {
+                    btn.click();
+                }
+                if (res.status == 'error') {
+                    $("input,button,select,textarea", form).not("[type=submit]").prop("disabled", false);
+                    $(".tooltip-current", form).removeClass("tooltip-current");
+                    if (res.input != '') {
+                        $(form).find("[name=\"" + res.input + "\"]").each(function() {
+                            $(this).addClass("tooltip-current").attr("data-current-mess", res.mess);
+                            ws_validErrorShow(this);
+                        });
+                    } else {
+                        $(".nv-info", form).html(res.mess).addClass("error").show();
+                    }
+                    setTimeout(function() {
+                        $("[type=submit]", form).prop("disabled", false);
+                    }, 1000);
+                } else {
+                    $(".nv-info", form).html(res.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show();
+                    $(".form-detail", form).hide();
+                    setTimeout(function() {
+                        window.location.href = "undefined" != typeof res.redirect && "" != res.redirect ? res.redirect : window.location.href;
+                    }, 3000);
+                }
+            }
+        });
+    }
+    return !1
 }
 
-function add_validForm(a) {
-    $(".has-error", a).removeClass("has-error");
-    var c = 0,
-        b = [];
-    $(a).find(".required").each(function() {
-        "password" == $(a).prop("type") && $(this).val(trim(strip_tags($(this).val())));
-        if (!validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
-    });
-    c || (b.type = $(a).prop("method"), b.url = $(a).prop("action"), b.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
-        type: b.type,
-        cache: !1,
-        url: b.url,
-        data: b.data,
-        dataType: "json",
-        success: function(d) {
-            var b = $("[onclick*='change_captcha']", a);
-            b && b.click();
-            "error" == d.status ? ($("input,button,select,textarea", a).not("[type=submit]").prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != d.input ? $(a).find("[name=" + d.input + "]").each(function() {
-                $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
-                validErrorShow(this)
-            }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
-                $("[type=submit]", a).prop("disabled", !1)
-            }, 1E3)) : ($(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), $(".form-detail", a).hide(), setTimeout(function() {
-                window.location.href = "undefined" != typeof d.redirect && "" != d.redirect ? d.redirect : window.location.href
-            }, 3E3))
-        }
-    }));
-    return !1
+function ws_datepickerShow(a) {
+    if ("object" == typeof $.datepicker) {
+        $(a).datepicker({
+            dateFormat: "dd/mm/yy",
+            changeMonth: !0,
+            changeYear: !0,
+            showOtherMonths: !0,
+            showOn: "focus",
+            yearRange: "-90:+0"
+        });
+        $(a).css("z-index", "1000").datepicker('show');
+    }
+}
+
+function ws_button_datepickerShow(a) {
+    var b = $(a).parent();
+    datepickerShow($(".datepicker", b))
 }
 
 function nv_main_action(oForm, msgnocheck) {

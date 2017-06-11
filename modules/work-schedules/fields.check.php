@@ -1,15 +1,19 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @Project WORK SCHEDULES 4.X
+ * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Copyright (C) 2016 PHAN TAN DUNG. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate 12/5/2012 11:29
+ * @Createdate Sat, 11 Jun 2016 23:45:51 GMT
  */
 
 if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
+}
+
+if (!isset($query_field_values) or !is_array($query_field_values)) {
+    $query_field_values = array();
 }
 
 foreach ($array_field_config as $row_f) {
@@ -170,9 +174,5 @@ foreach ($array_field_config as $row_f) {
             'mess' => sprintf($lang_module['field_match_type_required'], $row_f['title']) )));
     }
 
-    if ($userid) {
-        $query_field[] = $row_f['field'] . '=' . $db->quote($value);
-    } else {
-        $query_field[$row_f['field']] = $db->quote($value);
-    }
+    $query_field_values[$row_f['field']] = $value;
 }

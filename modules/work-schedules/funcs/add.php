@@ -40,8 +40,11 @@ if (!nv_user_in_groups($module_config[$module_name]['group_add']) and !defined('
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$error = '';
 $id = 0;
+$custom_fields = array();
+if (defined('NV_EDITOR')) {
+    require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+}
 
 if (isset($array_op[1])) {
     if (preg_match("/^edit\-([0-9]+)$/", $array_op[1], $m) and defined('NV_IS_MANAGER_ADMIN')) {
@@ -56,9 +59,11 @@ if (isset($array_op[1])) {
             die();
         }
 
-        $array['e_content'] = empty($array['e_content']) ? '' : nv_br2nl($array['e_content']);
-        $array['e_element'] = empty($array['e_element']) ? '' : nv_br2nl($array['e_element']);
         $array['event_textday'] = nv_date('d/m/Y', $array['e_time']);
+        
+        foreach ($array_field_config as $field) {
+            $custom_fields[$field['field']] = $array[$field['field']];
+        }
 
         $page_title = $lang_module['mana_edit'];
         $form_action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/edit-' . $id;
@@ -68,6 +73,7 @@ if (isset($array_op[1])) {
     }
 } else {
     $array = array(
+        'id' => 0,
         'e_day' => date('j'),
         'e_month' => date('n'),
         'e_week' => date('W'),
@@ -77,11 +83,6 @@ if (isset($array_op[1])) {
         'e_smin' => -1,
         'e_ehour' => -1,
         'e_emin' => -1,
-        'e_content' => '',
-        'e_element' => '',
-        'e_location' => '',
-        'e_host' => '',
-        'e_note' => '',
         'event_textday' => '',
         'status' => defined('NV_IS_MANAGER_ADMIN') ? 1 : 2,
         'highlights' => 0
@@ -90,20 +91,15 @@ if (isset($array_op[1])) {
     $form_action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 }
 
-
 if ($nv_Request->isset_request('event_textday', 'post')) {
+    $custom_fields = $nv_Request->get_array('custom_fields', 'post');
+    
     $array['event_textday'] = $nv_Request->get_string('event_textday', 'post', 0);
 
     $array['e_shour'] = $nv_Request->get_int('e_shour', 'post', -1);
     $array['e_smin'] = $nv_Request->get_int('e_smin', 'post', -1);
     $array['e_ehour'] = $nv_Request->get_int('e_ehour', 'post', -1);
     $array['e_emin'] = $nv_Request->get_int('e_emin', 'post', -1);
-
-    $array['e_content'] = $nv_Request->get_textarea('e_content', '', NV_ALLOWED_HTML_TAGS);
-    $array['e_element'] = $nv_Request->get_textarea('e_element', '', NV_ALLOWED_HTML_TAGS);
-    $array['e_location'] = nv_substr($nv_Request->get_title('e_location', 'post', 0), 0, 255);
-    $array['e_host'] = nv_substr($nv_Request->get_title('e_host', 'post', 0), 0, 255);
-    $array['e_note'] = $nv_Request->get_textarea('e_note', '', NV_ALLOWED_HTML_TAGS);
 
     $array['status'] = $nv_Request->get_int('status', 'post', 0);
     $array['highlights'] = $nv_Request->get_int('highlights', 'post', 0);
@@ -182,44 +178,10 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
         );
     }
 
-    if (empty($array['e_content'])) {
-        die(add_result(array(
-            'status' => 'error',
-            'input' => 'e_content',
-            'mess' => $lang_module['ae_error_e_content']))
-        );
-    }
-
-    if (empty($array['e_element']) and !empty($module_config[$module_name]['require_element'])) {
-        die(add_result(array(
-            'status' => 'error',
-            'input' => 'e_element',
-            'mess' => $lang_module['ae_error_e_element']))
-        );
-    }
-
-    if (empty($array['e_location']) and !empty($module_config[$module_name]['require_location'])) {
-        die(add_result(array(
-            'status' => 'error',
-            'input' => 'e_location',
-            'mess' => $lang_module['ae_error_e_location']))
-        );
-    }
-
-    if (empty($array['e_host']) and !empty($module_config[$module_name]['require_host'])) {
-        die(add_result(array(
-            'status' => 'error',
-            'input' => 'e_host',
-            'mess' => $lang_module['ae_error_e_host']))
-        );
-    }
-
-    if (empty($array['e_note']) and !empty($module_config[$module_name]['require_note'])) {
-        die(add_result(array(
-            'status' => 'error',
-            'input' => 'e_note',
-            'mess' => $lang_module['ae_error_e_note']))
-        );
+    // Kiểm tra các trường dữ liệu
+    $query_field = array();
+    if (!empty($array_field_config)) {
+        require NV_ROOTDIR . '/modules/' . $module_file . '/fields.check.php';
     }
 
     if ($array['status'] < 0 or $array['status'] > 2) {
@@ -254,22 +216,25 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
     $array['e_week'] = date('W', $array['e_time']);
     $array['e_year'] = date('Y', $array['e_time']);
 
-    $array['e_content'] = nv_nl2br($array['e_content']);
-    $array['e_element'] = nv_nl2br($array['e_element']);
-    $array['e_note'] = nv_nl2br($array['e_note']);
-
     if ($id) {
         $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET 
             edittime = ' . NV_CURRENTTIME . ', e_day = :e_day, e_month = :e_month, e_week = :e_week, e_year = :e_year, e_time = :e_time, e_shour = :e_shour, 
-            e_smin = :e_smin, e_ehour = :e_ehour, e_emin = :e_emin, e_content = :e_content, e_element = :e_element, e_location = :e_location, e_host = :e_host, 
-            e_note = :e_note, status = :status, highlights = :highlights 
-        WHERE id = ' . $id;
+            e_smin = :e_smin, e_ehour = :e_ehour, e_emin = :e_emin, status = :status, highlights = :highlights';
+        foreach ($array_field_config as $field) {
+            $sql .= ', ' . $field['field'] . ' = :' . $field['field'];
+        }
+        $sql .= ' WHERE id = ' . $id;
     } else {
+        $sql_key = $sql_value = '';
+        foreach ($array_field_config as $field) {
+            $sql_key .= ', ' . $field['field'];
+            $sql_value .= ', :' . $field['field'];
+        }
         $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (
-             post_id, addtime, edittime, e_day, e_month, e_week, e_year, e_time, e_shour, e_smin, e_ehour, e_emin, e_content, e_element, e_location, e_host, e_note, status, highlights
+             post_id, addtime, edittime, e_day, e_month, e_week, e_year, e_time, e_shour, e_smin, e_ehour, e_emin, status, highlights' . $sql_key . '
         ) VALUES (
             ' . $user_info['userid'] . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', :e_day, :e_month, :e_week, :e_year, :e_time, :e_shour, :e_smin, :e_ehour, :e_emin, 
-            :e_content, :e_element, :e_location, :e_host, :e_note, :status, :highlights
+            :status, :highlights' . $sql_value . '
         )';
     }
 
@@ -284,11 +249,11 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
         $sth->bindParam(':e_smin', $array['e_smin'], PDO::PARAM_INT);
         $sth->bindParam(':e_ehour', $array['e_ehour'], PDO::PARAM_INT);
         $sth->bindParam(':e_emin', $array['e_emin'], PDO::PARAM_INT);
-        $sth->bindParam(':e_content', $array['e_content'], PDO::PARAM_STR, strlen($array['e_content']));
-        $sth->bindParam(':e_element', $array['e_element'], PDO::PARAM_STR, strlen($array['e_element']));
-        $sth->bindParam(':e_location', $array['e_location'], PDO::PARAM_STR);
-        $sth->bindParam(':e_host', $array['e_host'], PDO::PARAM_STR);
-        $sth->bindParam(':e_note', $array['e_note'], PDO::PARAM_STR, strlen($array['e_note']));
+        
+        foreach ($array_field_config as $field) {
+            $sth->bindParam(':' . $field['field'], $query_field_values[$field['field']], PDO::PARAM_STR, strlen($query_field_values[$field['field']]));
+        }
+        
         $sth->bindParam(':status', $array['status'], PDO::PARAM_INT);
         $sth->bindParam(':highlights', $array['highlights'], PDO::PARAM_INT);
         $sth->execute();
@@ -297,15 +262,15 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
             $nv_Cache->delMod($module_name);
 
             if ($id) {
-                nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit Work: ', nv_clean60(strip_tags($array['e_content']), 50), $user_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit Work: ', $id, $user_info['userid']);
                 $redirect = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=manager', true);
                 $message = $lang_module['actionsuccess'];
             } elseif (defined('NV_IS_MANAGER_ADMIN')) {
-                nv_insert_logs(NV_LANG_DATA, $module_name, 'Add Work: ', nv_clean60(strip_tags($array['e_content']), 50), $user_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, 'Add Work: ', $array['e_time'], $user_info['userid']);
                 $redirect = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=manager', true);
                 $message = $lang_module['actionsuccess'];
             } else {
-                nv_insert_logs(NV_LANG_DATA, $module_name, 'Reg Work: ', nv_clean60(strip_tags($array['e_content']), 50), $user_info['userid']);
+                nv_insert_logs(NV_LANG_DATA, $module_name, 'Reg Work: ', $array['e_time'], $user_info['userid']);
                 $redirect = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
                 $message = $lang_module['ae_success'];
             }
@@ -318,6 +283,7 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
             );
         }
     } catch (PDOException $e) {
+        trigger_error($e->getMessage());
     }
 
     die(add_result(array(
@@ -327,7 +293,7 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
     );
 }
 
-$contents = nv_add_theme($array, $error, $form_action, $module_config[$module_name]);
+$contents = nv_add_theme($array, $form_action, $module_config[$module_name], $array_field_config, $custom_fields);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

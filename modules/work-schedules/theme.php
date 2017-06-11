@@ -241,12 +241,11 @@ function nv_info_theme($title, $message, $link, $type = 'info')
  * nv_add_theme()
  * 
  * @param mixed $array
- * @param mixed $error
  * @param mixed $form_action
  * @param mixed $cfg
  * @return
  */
-function nv_add_theme($array, $error, $form_action, $cfg)
+function nv_add_theme($array, $form_action, $cfg, $fields, $custom_fields)
 {
     global $lang_module, $module_info, $lang_global, $module_name, $op, $global_array_cat, $global_array_career, $global_array_location, $global_array_salary_type, $global_config;
 
@@ -337,12 +336,130 @@ function nv_add_theme($array, $error, $form_action, $cfg)
         $xtpl->parse('main.smin');
         $xtpl->parse('main.emin');
     }
-
-    if (!empty($error)) {
-        $xtpl->assign('ERROR', $error);
-        $xtpl->parse('main.error');
-    }   
     
+    $have_custom_fields = false;
+    
+    if (!empty($fields)) {
+        foreach ($fields as $_k => $row) {
+            $row['customID'] = $_k;
+            if ($row['show_addedit']) {
+                if (empty($array['id'])) {
+                    if (!empty($row['field_choices'])) {
+                        if ($row['field_type'] == 'date') {
+                            $row['value'] = ($row['field_choices']['current_date']) ? NV_CURRENTTIME : $row['default_value'];
+                        } elseif ($row['field_type'] == 'number') {
+                            $row['value'] = $row['default_value'];
+                        } else {
+                            $temp = array_keys($row['field_choices']);
+                            $tempkey = intval($row['default_value']) - 1;
+                            $row['value'] = (isset($temp[$tempkey])) ? $temp[$tempkey] : '';
+                        }
+                    } else {
+                        $row['value'] = $row['default_value'];
+                    }
+                } else {
+                    $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : $row['default_value'];
+                }
+                $row['required'] = ($row['required']) ? 'required' : '';
+    
+                $xtpl->assign('FIELD', $row);
+                
+                $loop_key = '';
+                $is_group_rowf = true;
+                
+                if ($row['field_type'] == 'textbox' or $row['field_type'] == 'number') {
+                    $loop_key = 'textbox';
+                } elseif ($row['field_type'] == 'date') {
+                    $row['value'] = (empty($row['value'])) ? '' : date('d/m/Y', $row['value']);
+                    $xtpl->assign('FIELD', $row);
+                    $loop_key = 'date';
+                } elseif ($row['field_type'] == 'textarea') {
+                    $row['value'] = nv_htmlspecialchars(nv_br2nl($row['value']));
+                    $xtpl->assign('FIELD', $row);
+                    $loop_key = 'textarea';
+                } elseif ($row['field_type'] == 'editor') {
+                    $row['value'] = htmlspecialchars(nv_editor_br2nl($row['value']));
+                    if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
+                        $array_tmp = explode('@', $row['class']);
+                        $edits = nv_aleditor('custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value']);
+                        $xtpl->assign('EDITOR', $edits);
+                        $loop_key = 'editor';
+                    } else {
+                        $row['class'] = '';
+                        $xtpl->assign('FIELD', $row);
+                        $loop_key = 'textarea';
+                    }
+                } elseif ($row['field_type'] == 'select') {
+                    foreach ($row['field_choices'] as $key => $value) {
+                        $xtpl->assign('FIELD_CHOICES', array(
+                            'key' => $key,
+                            'selected' => ($key == $row['value']) ? ' selected="selected"' : '',
+                            'value' => $value
+                        ));
+                        $xtpl->parse('main.field.loop.select.loop');
+                    }
+                    $loop_key = 'select';
+                } elseif ($row['field_type'] == 'radio') {
+                    $number = 0;
+                    foreach ($row['field_choices'] as $key => $value) {
+                        $xtpl->assign('FIELD_CHOICES', array(
+                            'id' => $row['fid'] . '_' . $number++,
+                            'key' => $key,
+                            'checked' => ($key == $row['value']) ? ' checked="checked"' : '',
+                            'value' => $value
+                        ));
+                        $xtpl->parse('main.field.loop.radio.loop');
+                    }
+                    $is_group_rowf = false;
+                    $loop_key = 'radio';
+                } elseif ($row['field_type'] == 'checkbox') {
+                    $number = 0;
+                    $valuecheckbox = (!empty($row['value'])) ? explode(',', $row['value']) : array();
+                    foreach ($row['field_choices'] as $key => $value) {
+                        $xtpl->assign('FIELD_CHOICES', array(
+                            'id' => $row['fid'] . '_' . $number++,
+                            'key' => $key,
+                            'checked' => (in_array($key, $valuecheckbox)) ? ' checked="checked"' : '',
+                            'value' => $value
+                        ));
+                        $xtpl->parse('main.field.loop.checkbox.loop');
+                    }
+                    $is_group_rowf = false;
+                    $loop_key = 'checkbox';
+                } elseif ($row['field_type'] == 'multiselect') {
+                    $valueselect = (!empty($row['value'])) ? explode(',', $row['value']) : array();
+                    foreach ($row['field_choices'] as $key => $value) {
+                        $xtpl->assign('FIELD_CHOICES', array(
+                            'key' => $key,
+                            'selected' => (in_array($key, $valueselect)) ? ' selected="selected"' : '',
+                            'value' => $value
+                        ));
+                        $xtpl->parse('main.field.loop.multiselect.loop');
+                    }
+                    $loop_key = 'multiselect';
+                }
+                
+                if ($row['required']) {
+                    $xtpl->parse('main.field.loop.required');
+                }
+                if (!empty($row['description'])) {
+                    $xtpl->parse('main.field.loop.' . $loop_key . '.description');
+                }
+                
+                $xtpl->assign('FIELD_GROUPROW_CLASS', $is_group_rowf ? ' class="form-group"' : '');
+                
+                $xtpl->parse('main.field.loop.' . $loop_key);
+                $xtpl->parse('main.field.loop');
+                
+                $have_custom_fields = true;
+            }
+        }
+    }
+    
+    if ($have_custom_fields) {
+        $xtpl->parse('main.field');
+    }
+        
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
