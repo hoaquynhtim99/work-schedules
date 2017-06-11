@@ -20,9 +20,10 @@ if (!defined('NV_MOD_WORK_SCHEDULES'))
  * @param mixed $links
  * @param mixed $numqueues
  * @param mixed $cfg
+ * @param mixed $fields
  * @return
  */
-function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg)
+function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg, $fields)
 {
     global $lang_module, $module_info, $module_name, $module_config;
 
@@ -42,6 +43,22 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg)
     if (empty($arrays)) {
         $xtpl->parse('main.empty');
     } else {
+        $num_custom_fields = 0;
+        foreach ($fields as $field) {
+            if (!empty($field['show_website'])) {
+                $num_custom_fields++;
+                $xtpl->assign('FIELD_TITLE', $field['title']);
+                $xtpl->assign('FIELD_DESCRIPTION', $field['description']);
+                
+                if (!empty($field['description'])) {
+                    $xtpl->parse('main.data.header_field.description');
+                }
+                $xtpl->parse('main.data.header_field');
+            }
+        }
+        
+        $xtpl->assign('COLSPAN', $num_custom_fields + 2);
+        
         foreach ($arrays as $thisWeek => $array) {
             $firstDay = 0;
             $array_dow = array();
@@ -86,26 +103,19 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg)
                 if (defined('NV_IS_MANAGER_ADMIN')) {
                     $xtpl->parse('main.data.loop.edit');
                 }
-                
-                // Các cấu hình hiển thị
-                if (!empty($cfg['display_element'])) {
-                    $xtpl->parse('main.data.loop.display_element');
-                    $xtpl->parse('main.data.loop_mobile.display_element');
-                }
-                
-                if (!empty($cfg['display_location'])) {
-                    $xtpl->parse('main.data.loop.display_location');
-                    $xtpl->parse('main.data.loop_mobile.display_location');
-                }
-                
-                if (!empty($cfg['display_host'])) {
-                    $xtpl->parse('main.data.loop.display_host');
-                    $xtpl->parse('main.data.loop_mobile.display_host');
-                }
-                
-                if (!empty($cfg['display_note'])) {
-                    $xtpl->parse('main.data.loop.display_note');
-                    $xtpl->parse('main.data.loop_mobile.display_note');
+        
+                foreach ($fields as $field) {
+                    if (!empty($field['show_website'])) {
+                        $xtpl->assign('FIELD_VALUE', nv_get_display_field_value($field, $row[$field['field']]));
+                        $xtpl->assign('FIELD_TITLE', $field['title']);
+                        $xtpl->parse('main.data.loop.field');
+
+                        if (!empty($field['description'])) {
+                            $xtpl->assign('FIELD_DESCRIPTION', $field['description']);
+                            $xtpl->parse('main.data.loop_mobile.field.description');
+                        }
+                        $xtpl->parse('main.data.loop_mobile.field');
+                    }
                 }
                 
                 if ($module_config[$module_name]['show_type'] == 'all' and $firstDay ++ == 0) {
@@ -118,23 +128,6 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg)
                 $xtpl->parse('main.data.loop_mobile');
             }
         }
-    
-        // Các cấu hình hiển thị
-        if (!empty($cfg['display_element'])) {
-            $xtpl->parse('main.data.display_element');
-        }
-        
-        if (!empty($cfg['display_location'])) {
-            $xtpl->parse('main.data.display_location');
-        }
-        
-        if (!empty($cfg['display_host'])) {
-            $xtpl->parse('main.data.display_host');
-        }
-        
-        if (!empty($cfg['display_note'])) {
-            $xtpl->parse('main.data.display_note');
-        }    
 
         $xtpl->parse('main.data');
     }
@@ -337,7 +330,7 @@ function nv_add_theme($array, $error, $form_action, $cfg)
             'title' => $i == -1 ? '--' : str_pad($i, 2, '0', STR_PAD_LEFT),
             'selected_s' => $i == $array['e_smin'] ? ' selected="selected"' : '',
             'selected_e' => $i == $array['e_emin'] ? ' selected="selected"' : '',
-            );
+        );
 
         $xtpl->assign('MIN', $min);
 
@@ -348,40 +341,7 @@ function nv_add_theme($array, $error, $form_action, $cfg)
     if (!empty($error)) {
         $xtpl->assign('ERROR', $error);
         $xtpl->parse('main.error');
-    }
-
-    // Các cấu hình hiển thị, bắt buộc
-    if (!empty($cfg['display_element'])) {
-        if (!empty($cfg['require_element'])) {
-            $xtpl->parse('main.display_element.require_element1');
-            $xtpl->parse('main.display_element.require_element2');
-        }
-        $xtpl->parse('main.display_element');
-    }
-    
-    if (!empty($cfg['display_location'])) {
-        if (!empty($cfg['require_location'])) {
-            $xtpl->parse('main.display_location.require_location1');
-            $xtpl->parse('main.display_location.require_location2');
-        }
-        $xtpl->parse('main.display_location');
-    }
-    
-    if (!empty($cfg['display_host'])) {
-        if (!empty($cfg['require_host'])) {
-            $xtpl->parse('main.display_host.require_host1');
-            $xtpl->parse('main.display_host.require_host2');
-        }
-        $xtpl->parse('main.display_host');
-    }
-    
-    if (!empty($cfg['display_note'])) {
-        if (!empty($cfg['require_note'])) {
-            $xtpl->parse('main.display_note.require_note1');
-            $xtpl->parse('main.display_note.require_note2');
-        }
-        $xtpl->parse('main.display_note');
-    }    
+    }   
     
     $xtpl->parse('main');
     return $xtpl->text('main');
@@ -394,9 +354,10 @@ function nv_add_theme($array, $error, $form_action, $cfg)
  * @param mixed $array_users
  * @param mixed $generate_page
  * @param mixed $array_list_action
+ * @param mixed $fields
  * @return
  */
-function nv_manager_list_theme($array, $array_users, $generate_page, $array_list_action)
+function nv_manager_list_theme($array, $array_users, $generate_page, $array_list_action, $fields)
 {
     global $lang_module, $module_info, $lang_global;
 
@@ -404,6 +365,22 @@ function nv_manager_list_theme($array, $array_users, $generate_page, $array_list
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 
+    $num_custom_fields = 0;
+    foreach ($fields as $field) {
+        if (!empty($field['show_manager'])) {
+            $num_custom_fields++;
+            $xtpl->assign('FIELD_TITLE', $field['title']);
+            $xtpl->assign('FIELD_DESCRIPTION', $field['description']);
+            
+            if (!empty($field['description'])) {
+                $xtpl->parse('main.header_field.description');
+            }
+            $xtpl->parse('main.header_field');
+        }
+    }
+    
+    $xtpl->assign('COLSPAN', $num_custom_fields + 4);
+    
     foreach ($array as $row) {
         $row['etime'] = str_pad($row['e_shour'], 2, '0', STR_PAD_LEFT) . ':' . str_pad($row['e_smin'], 2, '0', STR_PAD_LEFT);
 
@@ -420,6 +397,14 @@ function nv_manager_list_theme($array, $array_users, $generate_page, $array_list
         }
 
         $xtpl->assign('ROW', $row);
+        
+        foreach ($fields as $field) {
+            if (!empty($field['show_manager'])) {
+                $xtpl->assign('FIELD_VALUE', nv_get_display_field_value($field, $row[$field['field']]));
+                $xtpl->parse('main.loop.field');
+            }
+        }
+
         $xtpl->parse('main.loop');
     }
 

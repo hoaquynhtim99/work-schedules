@@ -13,7 +13,7 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE'))
 
 $module_version = array(
     'name' => 'Work Schedules',
-    'modfuncs' => 'main,manager,add,edit',
+    'modfuncs' => 'main,manager,add',
     'is_sysmod' => 0,
     'virtual' => 1,
     'version' => '4.1.02',

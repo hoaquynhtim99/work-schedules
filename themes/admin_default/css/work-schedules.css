@@ -1,4 +1,7 @@
-﻿.fa-required{
+﻿.display-inline-block {
+    display: inline-block!important;
+}
+.fa-required{
     display: block;
 }
 .fa-required em{
