@@ -302,7 +302,6 @@ function nv_add_theme($array, $form_action, $cfg, $fields, $custom_fields)
     
             $xtpl->parse('main.captcha');
         }
-
             
         $xtpl->parse('main.disable_oldday');
     }

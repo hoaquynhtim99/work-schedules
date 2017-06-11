@@ -118,7 +118,7 @@ foreach ($array_field_config as $row_f) {
                 if (! preg_match('/' . $row_f['match_regex'] . '/', $value)) {
                     die(json_encode(array(
                         'status' => 'error',
-                        'input' => 'custom_fields[' . $row_f['field'] . ']',
+                        'input' => $row_f['field_type'] == 'editor' ? '' : 'custom_fields[' . $row_f['field'] . ']',
                         'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title']) )));
                 }
             } elseif ($row_f['match_type'] == 'callback') {
@@ -126,13 +126,13 @@ foreach ($array_field_config as $row_f) {
                     if (! call_user_func($row_f['func_callback'], $value)) {
                         die(json_encode(array(
                             'status' => 'error',
-                            'input' => 'custom_fields[' . $row_f['field'] . ']',
+                            'input' => $row_f['field_type'] == 'editor' ? '' : 'custom_fields[' . $row_f['field'] . ']',
                             'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title']) )));
                     }
                 } else {
                     die(json_encode(array(
                         'status' => 'error',
-                        'input' => 'custom_fields[' . $row_f['field'] . ']',
+                        'input' => $row_f['field_type'] == 'editor' ? '' : 'custom_fields[' . $row_f['field'] . ']',
                         'mess' => 'error function not exists ' . $row_f['func_callback'] )));
                 }
             }
@@ -143,7 +143,7 @@ foreach ($array_field_config as $row_f) {
             if ($strlen < $row_f['min_length'] or $strlen > $row_f['max_length']) {
                 die(json_encode(array(
                     'status' => 'error',
-                    'input' => 'custom_fields[' . $row_f['field'] . ']',
+                    'input' => $row_f['field_type'] == 'editor' ? '' : 'custom_fields[' . $row_f['field'] . ']',
                     'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length']) )));
             }
         } elseif ($row_f['field_type'] == 'checkbox' or $row_f['field_type'] == 'multiselect') {
@@ -170,7 +170,7 @@ foreach ($array_field_config as $row_f) {
     if (empty($value) and $row_f['required']) {
         die(json_encode(array(
             'status' => 'error',
-            'input' => 'custom_fields[' . $row_f['field'] . ']',
+            'input' => $row_f['field_type'] == 'editor' ? '' : 'custom_fields[' . $row_f['field'] . ']',
             'mess' => sprintf($lang_module['field_match_type_required'], $row_f['title']) )));
     }
 
