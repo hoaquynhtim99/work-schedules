@@ -28,7 +28,8 @@ foreach ($array_field_config as $row_f) {
                 die(json_encode(array(
                     'status' => 'error',
                     'input' => 'custom_fields[' . $row_f['field'] . ']',
-                    'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title']) )));
+                    'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                )));
             } else {
                 $value = ($number_type == 1) ? intval($value) : floatval($value);
 
@@ -36,7 +37,8 @@ foreach ($array_field_config as $row_f) {
                     die(json_encode(array(
                         'status' => 'error',
                         'input' => 'custom_fields[' . $row_f['field'] . ']',
-                        'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], $row_f['min_length'], $row_f['max_length']) )));
+                        'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
+                    )));
                 }
             }
         } elseif ($row_f['field_type'] == 'date') {
@@ -47,13 +49,15 @@ foreach ($array_field_config as $row_f) {
                     die(json_encode(array(
                         'status' => 'error',
                         'input' => 'custom_fields[' . $row_f['field'] . ']',
-                        'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], date('d/m/Y', $row_f['min_length']), date('d/m/Y', $row_f['max_length'])) )));
+                        'mess' => sprintf($lang_module['field_min_max_value'], $row_f['title'], date('d/m/Y', $row_f['min_length']), date('d/m/Y', $row_f['max_length']))
+                    )));
                 }
             } else {
                 die(json_encode(array(
                     'status' => 'error',
                     'input' => 'custom_fields[' . $row_f['field'] . ']',
-                    'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title']) )));
+                    'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                )));
             }
         } elseif ($row_f['field_type'] == 'textbox') {
             if ($row_f['match_type'] == 'alphanumeric') {
@@ -61,28 +65,32 @@ foreach ($array_field_config as $row_f) {
                     die(json_encode(array(
                         'status' => 'error',
                         'input' => 'custom_fields[' . $row_f['field'] . ']',
-                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title']) )));
+                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                    )));
                 }
             } elseif ($row_f['match_type'] == 'email') {
                 if (($error = nv_check_valid_email($value)) != '') {
                     die(json_encode(array(
                         'status' => 'error',
                         'input' => 'custom_fields[' . $row_f['field'] . ']',
-                        'mess' => $error )));
+                        'mess' => $error
+                    )));
                 }
             } elseif ($row_f['match_type'] == 'url') {
                 if (! nv_is_url($value)) {
                     die(json_encode(array(
                         'status' => 'error',
                         'input' => 'custom_fields[' . $row_f['field'] . ']',
-                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title']) )));
+                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                    )));
                 }
             } elseif ($row_f['match_type'] == 'regex') {
                 if (! preg_match('/' . $row_f['match_regex'] . '/', $value)) {
                     die(json_encode(array(
                         'status' => 'error',
                         'input' => 'custom_fields[' . $row_f['field'] . ']',
-                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title']) )));
+                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                    )));
                 }
             } elseif ($row_f['match_type'] == 'callback') {
                 if (function_exists($row_f['func_callback'])) {
@@ -90,13 +98,15 @@ foreach ($array_field_config as $row_f) {
                         die(json_encode(array(
                             'status' => 'error',
                             'input' => 'custom_fields[' . $row_f['field'] . ']',
-                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title']) )));
+                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        )));
                     }
                 } else {
                     die(json_encode(array(
                         'status' => 'error',
                         'input' => 'custom_fields[' . $row_f['field'] . ']',
-                        'mess' => 'error function not exists ' . $row_f['func_callback'] )));
+                        'mess' => 'error function not exists ' . $row_f['func_callback']
+                    )));
                 }
             } else {
                 $value = nv_htmlspecialchars($value);
@@ -108,7 +118,8 @@ foreach ($array_field_config as $row_f) {
                 die(json_encode(array(
                     'status' => 'error',
                     'input' => 'custom_fields[' . $row_f['field'] . ']',
-                    'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length']) )));
+                    'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
+                )));
             }
         } elseif ($row_f['field_type'] == 'textarea' or $row_f['field_type'] == 'editor') {
             $allowed_html_tags = array_map('trim', explode(',', NV_ALLOWED_HTML_TAGS));
@@ -119,7 +130,8 @@ foreach ($array_field_config as $row_f) {
                     die(json_encode(array(
                         'status' => 'error',
                         'input' => $row_f['field_type'] == 'editor' ? '' : 'custom_fields[' . $row_f['field'] . ']',
-                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title']) )));
+                        'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                    )));
                 }
             } elseif ($row_f['match_type'] == 'callback') {
                 if (function_exists($row_f['func_callback'])) {
@@ -127,13 +139,15 @@ foreach ($array_field_config as $row_f) {
                         die(json_encode(array(
                             'status' => 'error',
                             'input' => $row_f['field_type'] == 'editor' ? '' : 'custom_fields[' . $row_f['field'] . ']',
-                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title']) )));
+                            'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                        )));
                     }
                 } else {
                     die(json_encode(array(
                         'status' => 'error',
                         'input' => $row_f['field_type'] == 'editor' ? '' : 'custom_fields[' . $row_f['field'] . ']',
-                        'mess' => 'error function not exists ' . $row_f['func_callback'] )));
+                        'mess' => 'error function not exists ' . $row_f['func_callback']
+                    )));
                 }
             }
 
@@ -144,7 +158,8 @@ foreach ($array_field_config as $row_f) {
                 die(json_encode(array(
                     'status' => 'error',
                     'input' => $row_f['field_type'] == 'editor' ? '' : 'custom_fields[' . $row_f['field'] . ']',
-                    'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length']) )));
+                    'mess' => sprintf($lang_module['field_min_max_error'], $row_f['title'], $row_f['min_length'], $row_f['max_length'])
+                )));
             }
         } elseif ($row_f['field_type'] == 'checkbox' or $row_f['field_type'] == 'multiselect') {
             $temp_value = array();
@@ -160,7 +175,8 @@ foreach ($array_field_config as $row_f) {
                 die(json_encode(array(
                     'status' => 'error',
                     'input' => 'custom_fields[' . $row_f['field'] . ']',
-                    'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title']) )));
+                    'mess' => sprintf($lang_module['field_match_type_error'], $row_f['title'])
+                )));
             }
         }
 
@@ -171,7 +187,8 @@ foreach ($array_field_config as $row_f) {
         die(json_encode(array(
             'status' => 'error',
             'input' => $row_f['field_type'] == 'editor' ? '' : 'custom_fields[' . $row_f['field'] . ']',
-            'mess' => sprintf($lang_module['field_match_type_required'], $row_f['title']) )));
+            'mess' => sprintf($lang_module['field_match_type_required'], $row_f['title'])
+        )));
     }
 
     $query_field_values[$row_f['field']] = $value;

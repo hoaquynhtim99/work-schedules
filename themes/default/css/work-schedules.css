@@ -24,6 +24,10 @@
 .schedule-list thead{
     background: #eaeef3;
 }
+.schedule-list thead th,
+.schedule-list thead td {
+    white-space: nowrap!important;
+}
 .schedule-list .week-head{
     background: #428bca;
     color: #fff;
