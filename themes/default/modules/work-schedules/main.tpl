@@ -4,13 +4,15 @@
     <div class="pull-left">
         <div class="btn-group">
             <a type="button" class="btn btn-warning" data-toggle="tooltip-week" data-mode="prev" data-value="{LANG.week_stt} {CURRENT_WEEK.stt} ({CURRENT_WEEK.from} {LANG.to} {CURRENT_WEEK.to})" title="{LANG.week_prev}"><i class="fa fa-step-backward" aria-hidden="true"></i></a>
-            <div class="btn-group">
+            <div class="btn-group" id="dropdown-selectweek">
                 <a class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {LANG.week_stt} {CURRENT_WEEK.stt} ({CURRENT_WEEK.from} {LANG.to} {CURRENT_WEEK.to})
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <!-- BEGIN: week --><li class="schedules-week"><a href="{WEEK.link}">{LANG.week_stt} {WEEK.stt} ({WEEK.from} {LANG.to} {WEEK.to})</a></li><!-- END: week -->
+                    <!-- BEGIN: week -->
+                    <li class="schedules-week<!-- BEGIN: current --> bg-warning<!-- END: current -->"><a href="{WEEK.link}">{LANG.week_stt} {WEEK.stt} ({WEEK.from} {LANG.to} {WEEK.to})</a></li>
+                    <!-- END: week -->
                 </ul>
             </div>
             <a type="button" class="btn btn-warning" data-toggle="tooltip-week" data-mode="next" data-value="{LANG.week_stt} {CURRENT_WEEK.stt} ({CURRENT_WEEK.from} {LANG.to} {CURRENT_WEEK.to})" title="{LANG.week_next}"><i class="fa fa-step-forward" aria-hidden="true"></i></a>

@@ -170,6 +170,11 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg)
             );
     
             $xtpl->assign('WEEK', $row);
+            
+            if ($week == ($i + 1)) {
+                $xtpl->parse('main.showweek.week.current');
+            }
+            
             $xtpl->parse('main.showweek.week');
         }
     

@@ -182,4 +182,17 @@ $(document).ready(function(){
         });
         
     });
+    // scrollTop dropdown menu
+    $('#dropdown-selectweek').on('shown.bs.dropdown', function() {
+        var $this = $(this);
+        var menu = $('.dropdown-menu', $this);
+        var offsetTop = 0;
+        $('li.schedules-week', menu).each(function() {
+            if ($(this).hasClass('bg-warning')) {
+                return false;
+            }
+            offsetTop += $(this).height();
+        });
+        menu.scrollTop(offsetTop);
+    });
 });
