@@ -124,3 +124,7 @@ $lang_module['cfgSYS_auto_delete_time'] = 'Xóa lịch sau';
 $lang_module['cfgSYS_cron_interval'] = 'Tần số kiểm tra xóa';
 $lang_module['cfgSYS_cron_interval_per'] = 'một lần';
 $lang_module['cfgSYS_cron_interval_note'] = 'Chú ý: Thời gian lặp lại tính từ khi có người truy cập vào khu vực lịch công tác, không phải là thời gian thực của máy chủ';
+$lang_module['cfgSYS_show_navweek'] = 'Hiển thị nút chọn tuần ở kiểu lịch tuần';
+$lang_module['cfgSYS_show_textweek'] = 'Hiển thị dòng text tuần bên dưới phần HTML đầu';
+$lang_module['cfgSYS_show_btntool'] = 'Hiển thị nút công cụ';
+$lang_module['cfgSYS_html_infotop'] = 'Nội dung HTML hiển thị ở đầu';

@@ -131,77 +131,108 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg, $fields)
 
         $xtpl->parse('main.data');
     }
+    
+    // Xuất tuần (Lấy ngày đầu của năm trừ ra)
+    $real_week = nv_get_week_from_time(NV_CURRENTTIME);
+    $this_year = $real_week[1];
+    $time_per_week = 86400 * 7;
+    $time_start_year = mktime(0, 0, 0, 1, 1, $year);
+    $time_first_week = $time_start_year - (86400 * (date('N', $time_start_year) - 1));
 
+    $have_tool_child = 0;
     if ($module_config[$module_name]['show_type'] == 'week') {
-        // Xuất tuần (Lấy ngày đầu của năm trừ ra)
-        $real_week = nv_get_week_from_time(NV_CURRENTTIME);
-        $this_year = $real_week[1];
-        $time_per_week = 86400 * 7;
-        $time_start_year = mktime(0, 0, 0, 1, 1, $year);
-        $time_first_week = $time_start_year - (86400 * (date('N', $time_start_year) - 1));
-    
-        // Thêm tuần cuối năm trước
-        $num_week_before = nv_get_max_week_of_year($year - 1);
-        $row = array(
-            'stt' => $num_week_before,
-            'from' => nv_date('d/m/Y', $time_first_week - $time_per_week),
-            'to' => nv_date('d/m/Y', $time_first_week - 1),
-            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . change_alias($lang_module['week']) . '-' . $num_week_before . '-' . ($year - 1)
-        );
-    
-        $xtpl->assign('WEEK', $row);
-        $xtpl->parse('main.showweek.week');
-    
-        // Các tuần trong năm
-        $num_week_loop = nv_get_max_week_of_year($year) - 1;
-        for ($i = 0; $i <= $num_week_loop; $i++) {
-            $row = array(
-                'stt' => $i + 1,
-                'from' => nv_date('d/m/Y', $time_first_week + $i * $time_per_week),
-                'to' => nv_date('d/m/Y', $time_first_week + $i * $time_per_week + $time_per_week - 1),
-                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . change_alias($lang_module['week']) . '-' . ($i + 1) . ($this_year == $year ? '' : '-' . $year)
-            );
-    
-            $xtpl->assign('WEEK', $row);
-            
-            if ($week == ($i + 1)) {
-                $xtpl->parse('main.showweek.week.current');
-            }
-            
-            $xtpl->parse('main.showweek.week');
-        }
-    
-        // Thêm tuần đầu năm sau
-        $num_week = nv_get_max_week_of_year($year);
-        $row = array(
-            'stt' => 1,
-            'from' => nv_date('d/m/Y', $time_first_week + $num_week * $time_per_week),
-            'to' => nv_date('d/m/Y', $time_first_week + $num_week * $time_per_week + $time_per_week - 1),
-            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . change_alias($lang_module['week']) . '-1-' . ($year + 1)
-        );
-    
-        $xtpl->assign('WEEK', $row);
-        $xtpl->parse('main.showweek.week');
-    
-        $current_week = array(
-            'stt' => $week,
-            'from' => nv_date('d/m/Y', $time_first_week + ($week - 1) * $time_per_week),
-            'to' => nv_date('d/m/Y', $time_first_week + ($week - 1) * $time_per_week + $time_per_week - 1),
-        );
-        $xtpl->assign('CURRENT_WEEK', $current_week);
-        $xtpl->parse('main.showweek');
-        $xtpl->parse('main.showweek_note');
-    }
+        if (!empty($module_config[$module_name]['show_navweek'])) {
+            $have_tool_child++;
 
-    if ($numqueues > 0) {
-        $xtpl->assign('NUMQUEUES', $numqueues);
-        $xtpl->parse('main.numqueues');
+            // Thêm tuần cuối năm trước
+            $num_week_before = nv_get_max_week_of_year($year - 1);
+            $row = array(
+                'stt' => $num_week_before,
+                'from' => nv_date('d/m/Y', $time_first_week - $time_per_week),
+                'to' => nv_date('d/m/Y', $time_first_week - 1),
+                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . change_alias($lang_module['week']) . '-' . $num_week_before . '-' . ($year - 1)
+            );
+        
+            $xtpl->assign('WEEK', $row);
+            $xtpl->parse('main.show_tool.showweek.week');
+        
+            // Các tuần trong năm
+            $num_week_loop = nv_get_max_week_of_year($year) - 1;
+            for ($i = 0; $i <= $num_week_loop; $i++) {
+                $row = array(
+                    'stt' => $i + 1,
+                    'from' => nv_date('d/m/Y', $time_first_week + $i * $time_per_week),
+                    'to' => nv_date('d/m/Y', $time_first_week + $i * $time_per_week + $time_per_week - 1),
+                    'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . change_alias($lang_module['week']) . '-' . ($i + 1) . ($this_year == $year ? '' : '-' . $year)
+                );
+        
+                $xtpl->assign('WEEK', $row);
+                
+                if ($week == ($i + 1)) {
+                    $xtpl->parse('main.show_tool.showweek.week.current');
+                }
+                
+                $xtpl->parse('main.show_tool.showweek.week');
+            }
+        
+            // Thêm tuần đầu năm sau
+            $num_week = nv_get_max_week_of_year($year);
+            $row = array(
+                'stt' => 1,
+                'from' => nv_date('d/m/Y', $time_first_week + $num_week * $time_per_week),
+                'to' => nv_date('d/m/Y', $time_first_week + $num_week * $time_per_week + $time_per_week - 1),
+                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . change_alias($lang_module['week']) . '-1-' . ($year + 1)
+            );
+        
+            $xtpl->assign('WEEK', $row);
+            $xtpl->parse('main.show_tool.showweek.week');
+        
+            $current_week = array(
+                'stt' => $week,
+                'from' => nv_date('d/m/Y', $time_first_week + ($week - 1) * $time_per_week),
+                'to' => nv_date('d/m/Y', $time_first_week + ($week - 1) * $time_per_week + $time_per_week - 1),
+            );
+            $xtpl->assign('CURRENT_WEEK', $current_week);
+            $xtpl->parse('main.show_tool.showweek');
+        }
+        
+        $xtpl->parse('main.showweek_note');
     }
 
     if (defined('NV_IS_MANAGER_ADMIN')) {
         $xtpl->assign('LANG_ADD', $lang_module['mana_add1']);
     } else {
         $xtpl->assign('LANG_ADD', $lang_module['add']);
+    }
+    
+    // Xuất nút công cụ
+    if (!empty($module_config[$module_name]['show_btntool'])) {
+        $have_tool_child++;
+        if ($numqueues > 0) {
+            $xtpl->assign('NUMQUEUES', $numqueues);
+            $xtpl->parse('main.show_tool.showbtn.numqueues');
+        }
+        $xtpl->parse('main.show_tool.showbtn');
+    }
+
+    if ($have_tool_child > 0) {
+        $xtpl->parse('main.show_tool');
+    }
+
+    // Text tuần từ ngày đến ngày
+    $have_text_week = false;
+    if (!empty($module_config[$module_name]['show_textweek']) and $module_config[$module_name]['show_type'] == 'week') {
+        $xtpl->assign('TEXT_WEEK', sprintf($lang_module['week_from_to'], nv_date('d/m/Y', $time_first_week + ($week - 1) * $time_per_week), nv_date('d/m/Y', $time_first_week + ($week - 1) * $time_per_week + $time_per_week - 1)));
+        $xtpl->parse('main.show_textweek');
+        $have_text_week = true;
+    }
+    // Nội dung HTML đầu
+    if (!empty($module_config[$module_name]['html_infotop'])) {
+        $xtpl->assign('HTML_INFOTOP', $module_config[$module_name]['html_infotop']);
+        if (!$have_text_week) {
+            $xtpl->parse('main.show_html_infotop.margin_bottom');
+        }
+        $xtpl->parse('main.show_html_infotop');
     }
 
     $xtpl->parse('main');

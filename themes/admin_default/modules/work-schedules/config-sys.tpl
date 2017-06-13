@@ -50,6 +50,30 @@
                             <span class="help-block help-block-no">{LANG.cfgSYS_show_type_all_note}</span>
                         </td>
                     </tr>
+                    <tr>
+                        <td class="form-label"><strong>{LANG.cfgSYS_show_navweek}</strong></td>
+                        <td>
+                            <input type="checkbox" value="1" name="show_navweek"{DATA.show_navweek}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form-label"><strong>{LANG.cfgSYS_show_textweek}</strong></td>
+                        <td>
+                            <input type="checkbox" value="1" name="show_textweek"{DATA.show_textweek}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form-label"><strong>{LANG.cfgSYS_show_btntool}</strong></td>
+                        <td>
+                            <input type="checkbox" value="1" name="show_btntool"{DATA.show_btntool}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form-label"><strong>{LANG.cfgSYS_html_infotop}</strong></td>
+                        <td>
+                            {DATA.html_infotop}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

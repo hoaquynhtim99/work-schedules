@@ -19,6 +19,7 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['week'] = 'Tuần';
+$lang_module['week_from_to'] = 'Từ ngày <strong>%s</strong> đến ngày <strong>%s</strong>';
 $lang_module['week_next'] = 'Tuần sau';
 $lang_module['week_prev'] = 'Tuần trước';
 $lang_module['schedule_empty'] = 'Chưa có lịch cho tuần này';
