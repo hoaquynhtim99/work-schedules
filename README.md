@@ -27,6 +27,7 @@ Module lịch công tác tuần. Quản lý và hiển thị lịch công tác, 
 - Chạy trên NukeViet 4.1.02, 4.1.01
 - Thêm phần thiết lập nội dung HTML ở đầu, ẩn/hiện dòng chữ tuần từ ngày đến ngày, ẩn/hiện các nút công cụ.
 - Thêm phần thiết lập trường dữ liệu.
+- Nút chọn tuần ở ngoài site sẽ tự cuộn tới tuần hiện tại khi nhấp vào
 
 ### V4.1.01
 
