@@ -18,4 +18,5 @@ Tải gói cập nhật tại https://github.com/hoaquynhtim99/work-schedules/re
 ## Bước 2: Sau cập nhật
 
 Vào phần cấu hình của module, thiết lập lại các giá trị cấu hình và lưu lại.
+Dọn dẹp hệ thống, có thể cần phải xóa cache trình duyệt nếu vào khu vực **Cấu hình trường dữ liệu** mà không hiển thị danh sách các trường dữ liệu.
 Các vấn đề phát sinh thảo luận https://github.com/hoaquynhtim99/work-schedules/issues
