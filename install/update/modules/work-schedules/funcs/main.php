@@ -11,7 +11,7 @@
 if (!defined('NV_MOD_WORK_SCHEDULES'))
     die('Stop!!!');
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 
 if (isset($array_op[2])) {
@@ -244,7 +244,7 @@ if (defined('NV_IS_MANAGER_ADMIN')) {
     $numqueues = $db->query($sql)->fetchColumn();
 }
 
-$contents = nv_main_theme($array, $year, $week, $links, $numqueues, $module_config[$module_name]);
+$contents = nv_main_theme($array, $year, $week, $links, $numqueues, $module_config[$module_name], $array_field_config);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

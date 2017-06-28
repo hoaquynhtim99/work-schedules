@@ -12,7 +12,7 @@ if (!defined('NV_ADMIN'))
     die('Stop!!!');
 
 $submenu['config'] = $lang_module['config'];
-$submenu['config-display'] = $lang_module['cfgDisplay'];
+$submenu['fields'] = $lang_module['field'];
 $submenu['config-sys'] = $lang_module['cfgSYS'];
 
-$allow_func = array('main', 'config', 'config-display', 'config-sys');
+$allow_func = array('main', 'config', 'fields', 'config-sys');

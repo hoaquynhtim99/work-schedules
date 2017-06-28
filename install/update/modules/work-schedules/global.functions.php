@@ -91,3 +91,23 @@ function nv_get_max_week_of_year($year)
         return 52;
     }
 }
+
+/**
+ * nv_get_display_field_value()
+ * 
+ * @param mixed $field
+ * @param mixed $value
+ * @return
+ */
+function nv_get_display_field_value($field, $value)
+{
+    if (empty($field) or empty($value)) {
+        return '';
+    }
+    
+    if ($field['field_type'] == 'date') {
+        $value = nv_date('d/m/Y', intval($value));
+    }
+    
+    return $value;
+}

@@ -155,7 +155,7 @@ $array_list_action = array(
     'stop' => $lang_module['mana_action_stop']
 );
 
-$contents = nv_manager_list_theme($array, $array_users, $generate_page, $array_list_action);
+$contents = nv_manager_list_theme($array, $array_users, $generate_page, $array_list_action, $array_field_config);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

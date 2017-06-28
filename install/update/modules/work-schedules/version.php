@@ -13,11 +13,11 @@ if (!defined('NV_ADMIN') or !defined('NV_MAINFILE'))
 
 $module_version = array(
     'name' => 'Work Schedules',
-    'modfuncs' => 'main,manager,add,edit',
+    'modfuncs' => 'main,manager,add',
     'is_sysmod' => 0,
     'virtual' => 1,
-    'version' => '4.1.00',
-    'date' => 'Tue, 27 Dec 2016 04:25:54 GMT',
+    'version' => '4.1.02',
+    'date' => 'Wednesday, June 28, 2017 6:17:12 PM',
     'author' => 'PHAN TAN DUNG (phantandung92@gmail.com)',
     'note' => '',
     'uploads_dir' => array($module_upload)
