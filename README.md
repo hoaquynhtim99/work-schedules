@@ -7,7 +7,7 @@ Module lịch công tác tuần. Quản lý và hiển thị lịch công tác, 
 - Cấu hình quyền hiệu chỉnh lịch
 - Cấu hình kiểu hiển thị lịch (tất cả, theo tuần)
 - Cấu hình tiến trình tự động xóa lịch cũ
-- Chọn các trường dữ liệu sẽ hiển thị và bắt buộc nhập
+- Thiết lập các trường dữ liệu
 
 **Chức năng ngoài site:**
 
@@ -21,6 +21,12 @@ Module lịch công tác tuần. Quản lý và hiển thị lịch công tác, 
 > Khuyến nghị nên chọn layout body (hoặc layout main) cho module
 
 ## Changelogs
+
+### V4.1.02
+
+- Chạy trên NukeViet 4.1.02, 4.1.01
+- Thêm phần thiết lập nội dung HTML ở đầu, ẩn/hiện dòng chữ tuần từ ngày đến ngày, ẩn/hiện các nút công cụ.
+- Thêm phần thiết lập trường dữ liệu.
 
 ### V4.1.01
 
