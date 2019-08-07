@@ -54,3 +54,8 @@
 !/themes/admin_default/js/work-schedules.js
 !/themes/admin_default/images/work-schedules
 !/themes/admin_default/modules/work-schedules
+/.buildpath
+/.github
+/.project
+/.settings
+/error.php
