@@ -8,12 +8,13 @@
  * @Createdate Sat, 11 Jun 2016 23:45:51 GMT
  */
 
-if (!defined('NV_MOD_WORK_SCHEDULES'))
+if (!defined('NV_MOD_WORK_SCHEDULES')) {
     die('Stop!!!');
+}
 
 /**
  * nv_main_theme()
- * 
+ *
  * @param mixed $arrays
  * @param mixed $year
  * @param mixed $week
@@ -49,16 +50,16 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg, $fields)
                 $num_custom_fields++;
                 $xtpl->assign('FIELD_TITLE', $field['title']);
                 $xtpl->assign('FIELD_DESCRIPTION', $field['description']);
-                
+
                 if (!empty($field['description'])) {
                     $xtpl->parse('main.data.header_field.description');
                 }
                 $xtpl->parse('main.data.header_field');
             }
         }
-        
+
         $xtpl->assign('COLSPAN', $num_custom_fields + 2);
-        
+
         foreach ($arrays as $thisWeek => $array) {
             $firstDay = 0;
             $array_dow = array();
@@ -70,40 +71,40 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg, $fields)
                     $array_dow[$d]++;
                 }
             }
-    
+
             $array_tmp = array();
             foreach ($array as $row) {
                 $d = date('N', $row['e_time']);
-    
+
                 $row['etime'] = str_pad($row['e_shour'], 2, '0', STR_PAD_LEFT) . ':' . str_pad($row['e_smin'], 2, '0', STR_PAD_LEFT);
-    
+
                 if ($row['e_ehour'] > -1) {
                     $row['etime'] .= ' - ' . str_pad($row['e_ehour'], 2, '0', STR_PAD_LEFT) . ':' . str_pad($row['e_emin'], 2, '0', STR_PAD_LEFT);
                 }
                 $row['highlights'] = empty($row['highlights']) ? '' : ' highlights';
                 $row['panel_type'] = empty($row['highlights']) ? 'default' : 'success';
-    
+
                 $xtpl->assign('ROW', $row);
-    
+
                 if (!isset($array_tmp[$d])) {
                     $xtpl->assign('DAYOFWEEK', nv_date("l", $row['e_time']));
                     $xtpl->assign('DAYTEXT', nv_date("d/m/Y", $row['e_time']));
-    
+
                     if ($array_dow[$d] > 1) {
                         $xtpl->assign('NUMROWS', $array_dow[$d]);
                         $xtpl->parse('main.data.loop.first_col.rowspan');
                     }
-    
+
                     $xtpl->parse('main.data.loop.first_col');
                     $xtpl->parse('main.data.loop_mobile.title');
-    
+
                     $array_tmp[$d] = true;
                 }
-    
+
                 if (defined('NV_IS_MANAGER_ADMIN')) {
                     $xtpl->parse('main.data.loop.edit');
                 }
-        
+
                 foreach ($fields as $field) {
                     if (!empty($field['show_website'])) {
                         $xtpl->assign('FIELD_VALUE', nv_get_display_field_value($field, $row[$field['field']]));
@@ -117,13 +118,13 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg, $fields)
                         $xtpl->parse('main.data.loop_mobile.field');
                     }
                 }
-                
+
                 if ($module_config[$module_name]['show_type'] == 'all' and $firstDay ++ == 0) {
                     $xtpl->assign('THISWEEK', $thisWeek);
                     $xtpl->parse('main.data.loop.week');
                     $xtpl->parse('main.data.loop_mobile.week');
                 }
-    
+
                 $xtpl->parse('main.data.loop');
                 $xtpl->parse('main.data.loop_mobile');
             }
@@ -131,7 +132,7 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg, $fields)
 
         $xtpl->parse('main.data');
     }
-    
+
     // Xuất tuần (Lấy ngày đầu của năm trừ ra)
     $real_week = nv_get_week_from_time(NV_CURRENTTIME);
     $this_year = $real_week[1];
@@ -152,10 +153,10 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg, $fields)
                 'to' => nv_date('d/m/Y', $time_first_week - 1),
                 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . change_alias($lang_module['week']) . '-' . $num_week_before . '-' . ($year - 1)
             );
-        
+
             $xtpl->assign('WEEK', $row);
             $xtpl->parse('main.show_tool.showweek.week');
-        
+
             // Các tuần trong năm
             $num_week_loop = nv_get_max_week_of_year($year) - 1;
             for ($i = 0; $i <= $num_week_loop; $i++) {
@@ -165,16 +166,16 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg, $fields)
                     'to' => nv_date('d/m/Y', $time_first_week + $i * $time_per_week + $time_per_week - 1),
                     'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . change_alias($lang_module['week']) . '-' . ($i + 1) . ($this_year == $year ? '' : '-' . $year)
                 );
-        
+
                 $xtpl->assign('WEEK', $row);
-                
+
                 if ($week == ($i + 1)) {
                     $xtpl->parse('main.show_tool.showweek.week.current');
                 }
-                
+
                 $xtpl->parse('main.show_tool.showweek.week');
             }
-        
+
             // Thêm tuần đầu năm sau
             $num_week = nv_get_max_week_of_year($year);
             $row = array(
@@ -183,10 +184,10 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg, $fields)
                 'to' => nv_date('d/m/Y', $time_first_week + $num_week * $time_per_week + $time_per_week - 1),
                 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . change_alias($lang_module['week']) . '-1-' . ($year + 1)
             );
-        
+
             $xtpl->assign('WEEK', $row);
             $xtpl->parse('main.show_tool.showweek.week');
-        
+
             $current_week = array(
                 'stt' => $week,
                 'from' => nv_date('d/m/Y', $time_first_week + ($week - 1) * $time_per_week),
@@ -195,7 +196,7 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg, $fields)
             $xtpl->assign('CURRENT_WEEK', $current_week);
             $xtpl->parse('main.show_tool.showweek');
         }
-        
+
         $xtpl->parse('main.showweek_note');
     }
 
@@ -204,7 +205,7 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg, $fields)
     } else {
         $xtpl->assign('LANG_ADD', $lang_module['add']);
     }
-    
+
     // Xuất nút công cụ
     if (!empty($module_config[$module_name]['show_btntool'])) {
         $have_tool_child++;
@@ -241,7 +242,7 @@ function nv_main_theme($arrays, $year, $week, $links, $numqueues, $cfg, $fields)
 
 /**
  * nv_info_theme()
- * 
+ *
  * @param mixed $title
  * @param mixed $message
  * @param mixed $link
@@ -270,7 +271,7 @@ function nv_info_theme($title, $message, $link, $type = 'info')
 
 /**
  * nv_add_theme()
- * 
+ *
  * @param mixed $array
  * @param mixed $form_action
  * @param mixed $cfg
@@ -330,10 +331,10 @@ function nv_add_theme($array, $form_action, $cfg, $fields, $custom_fields)
             $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/refresh.png');
             $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
             $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
-    
+
             $xtpl->parse('main.captcha');
         }
-            
+
         $xtpl->parse('main.disable_oldday');
     }
 
@@ -366,9 +367,9 @@ function nv_add_theme($array, $form_action, $cfg, $fields, $custom_fields)
         $xtpl->parse('main.smin');
         $xtpl->parse('main.emin');
     }
-    
+
     $have_custom_fields = false;
-    
+
     if (!empty($fields)) {
         foreach ($fields as $_k => $row) {
             $row['customID'] = $_k;
@@ -391,12 +392,12 @@ function nv_add_theme($array, $form_action, $cfg, $fields, $custom_fields)
                     $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : $row['default_value'];
                 }
                 $row['required'] = ($row['required']) ? 'required' : '';
-    
+
                 $xtpl->assign('FIELD', $row);
-                
+
                 $loop_key = '';
                 $is_group_rowf = true;
-                
+
                 if ($row['field_type'] == 'textbox' or $row['field_type'] == 'number') {
                     $loop_key = 'textbox';
                 } elseif ($row['field_type'] == 'date') {
@@ -468,35 +469,35 @@ function nv_add_theme($array, $form_action, $cfg, $fields, $custom_fields)
                     }
                     $loop_key = 'multiselect';
                 }
-                
+
                 if ($row['required']) {
                     $xtpl->parse('main.field.loop.required');
                 }
                 if (!empty($row['description'])) {
                     $xtpl->parse('main.field.loop.' . $loop_key . '.description');
                 }
-                
+
                 $xtpl->assign('FIELD_GROUPROW_CLASS', $is_group_rowf ? ' class="form-group"' : '');
-                
+
                 $xtpl->parse('main.field.loop.' . $loop_key);
                 $xtpl->parse('main.field.loop');
-                
+
                 $have_custom_fields = true;
             }
         }
     }
-    
+
     if ($have_custom_fields) {
         $xtpl->parse('main.field');
     }
-        
+
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
 /**
  * nv_manager_list_theme()
- * 
+ *
  * @param mixed $array
  * @param mixed $array_users
  * @param mixed $generate_page
@@ -518,16 +519,16 @@ function nv_manager_list_theme($array, $array_users, $generate_page, $array_list
             $num_custom_fields++;
             $xtpl->assign('FIELD_TITLE', $field['title']);
             $xtpl->assign('FIELD_DESCRIPTION', $field['description']);
-            
+
             if (!empty($field['description'])) {
                 $xtpl->parse('main.header_field.description');
             }
             $xtpl->parse('main.header_field');
         }
     }
-    
+
     $xtpl->assign('COLSPAN', $num_custom_fields + 4);
-    
+
     foreach ($array as $row) {
         $row['etime'] = str_pad($row['e_shour'], 2, '0', STR_PAD_LEFT) . ':' . str_pad($row['e_smin'], 2, '0', STR_PAD_LEFT);
 
@@ -544,7 +545,7 @@ function nv_manager_list_theme($array, $array_users, $generate_page, $array_list
         }
 
         $xtpl->assign('ROW', $row);
-        
+
         foreach ($fields as $field) {
             if (!empty($field['show_manager'])) {
                 $xtpl->assign('FIELD_VALUE', nv_get_display_field_value($field, $row[$field['field']]));
@@ -560,7 +561,7 @@ function nv_manager_list_theme($array, $array_users, $generate_page, $array_list
         $xtpl->parse('main.generate_page');
     }
 
-    while (list($action_i, $title_i) = each($array_list_action)) {
+    foreach ($array_list_action as $action_i => $title_i) {
         $action_assign = array('value' => $action_i, 'title' => $title_i);
         $xtpl->assign('ACTION', $action_assign);
         $xtpl->parse('main.action');

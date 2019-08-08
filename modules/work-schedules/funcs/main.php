@@ -8,8 +8,9 @@
  * @Createdate Sat, 11 Jun 2016 23:45:51 GMT
  */
 
-if (!defined('NV_MOD_WORK_SCHEDULES'))
+if (!defined('NV_MOD_WORK_SCHEDULES')) {
     die('Stop!!!');
+}
 
 $page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
@@ -51,7 +52,7 @@ if (isset($array_op[0])) {
             $m[1] = intval($m[1]);
             $m[2] = intval($m[2]);
             $num_week = nv_get_max_week_of_year($m[2]);
-            
+
             if ($m[1] > 0 and $m[1] <= $num_week and $m[2] > 1699 and $m[2] < 2101) {
                 $valid = true;
                 $week = $m[1];

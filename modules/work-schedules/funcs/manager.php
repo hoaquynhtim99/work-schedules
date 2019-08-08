@@ -8,8 +8,9 @@
  * @Createdate Sat, 11 Jun 2016 23:45:51 GMT
  */
 
-if (!defined('NV_MOD_WORK_SCHEDULES'))
+if (!defined('NV_MOD_WORK_SCHEDULES')) {
     die('Stop!!!');
+}
 
 $page_title = $lang_module['mana_pagetitle'];
 $key_words = $description = 'no';
