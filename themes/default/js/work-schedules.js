@@ -59,6 +59,12 @@ function ws_formErrorHidden(a) {
 }
 
 function ws_add_validForm(form) {
+    // Xử lý các trình soạn thảo
+    if (typeof CKEDITOR != "undefined") {
+        for (var instanceName in CKEDITOR.instances) {
+            $('#' + instanceName).val(CKEDITOR.instances[instanceName].getData());
+        }
+    }
     $(".has-error", form).removeClass("has-error");
     $(".tooltip-current", form).removeClass("tooltip-current");
     var isError = false,
@@ -157,8 +163,8 @@ function nv_main_action(oForm, msgnocheck) {
         if (action == 'delete') {
             if (confirm(nv_is_del_confirm[0])) {
                 $.post(
-                    nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(), 
-                    'delete=1&listid=' + listid, 
+                    nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                    'delete=1&listid=' + listid,
                     function(res) {
                         var r_split = res.split("_");
                         if (r_split[0] == 'OK') {
@@ -171,8 +177,8 @@ function nv_main_action(oForm, msgnocheck) {
             }
         } else {
             $.post(
-                nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(), 
-                'changestatus=1&action=' + action + '&listid=' + listid, 
+                nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+                'changestatus=1&action=' + action + '&listid=' + listid,
                 function(res) {
                     alert(res);
                     window.location.href = window.location.href;
@@ -187,8 +193,8 @@ function nv_main_action(oForm, msgnocheck) {
 function nv_del_row( id ){
     if (confirm(nv_is_del_confirm[0])) {
         $.post(
-            nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(), 
-            'delete=1&id=' + id, 
+            nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + nv_func_name + '&nocache=' + new Date().getTime(),
+            'delete=1&id=' + id,
             function(res) {
                 var r_split = res.split("_");
                 if (r_split[0] == 'OK') {
@@ -209,7 +215,7 @@ $(document).ready(function(){
         }else{
             return 1;
         }
-    });    
+    });
     // Tooltip
     $('[data-toggle="tooltip-week"]').tooltip({container: 'body'});
     $('[data-toggle="tooltip-week"]').click(function() {
@@ -221,7 +227,7 @@ $(document).ready(function(){
                 return false;
             }
         });
-        
+
     });
     // scrollTop dropdown menu
     $('#dropdown-selectweek').on('shown.bs.dropdown', function() {

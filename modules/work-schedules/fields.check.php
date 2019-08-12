@@ -8,7 +8,7 @@
  * @Createdate Sat, 11 Jun 2016 23:45:51 GMT
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -24,7 +24,7 @@ foreach ($array_field_config as $row_f) {
             $number_type = $row_f['field_choices']['number_type'];
             $pattern = ($number_type == 1) ? '/^[0-9]+$/' : '/^[0-9\.]+$/';
 
-            if (! preg_match($pattern, $value)) {
+            if (!preg_match($pattern, $value)) {
                 die(json_encode(array(
                     'status' => 'error',
                     'input' => 'custom_fields[' . $row_f['field'] . ']',
@@ -61,7 +61,7 @@ foreach ($array_field_config as $row_f) {
             }
         } elseif ($row_f['field_type'] == 'textbox') {
             if ($row_f['match_type'] == 'alphanumeric') {
-                if (! preg_match('/^[a-zA-Z0-9\_]+$/', $value)) {
+                if (!preg_match('/^[a-zA-Z0-9\_]+$/', $value)) {
                     die(json_encode(array(
                         'status' => 'error',
                         'input' => 'custom_fields[' . $row_f['field'] . ']',
@@ -77,7 +77,7 @@ foreach ($array_field_config as $row_f) {
                     )));
                 }
             } elseif ($row_f['match_type'] == 'url') {
-                if (! nv_is_url($value)) {
+                if (!nv_is_url($value)) {
                     die(json_encode(array(
                         'status' => 'error',
                         'input' => 'custom_fields[' . $row_f['field'] . ']',
@@ -85,7 +85,7 @@ foreach ($array_field_config as $row_f) {
                     )));
                 }
             } elseif ($row_f['match_type'] == 'regex') {
-                if (! preg_match('/' . $row_f['match_regex'] . '/', $value)) {
+                if (!preg_match('/' . $row_f['match_regex'] . '/', $value)) {
                     die(json_encode(array(
                         'status' => 'error',
                         'input' => 'custom_fields[' . $row_f['field'] . ']',
@@ -94,7 +94,7 @@ foreach ($array_field_config as $row_f) {
                 }
             } elseif ($row_f['match_type'] == 'callback') {
                 if (function_exists($row_f['func_callback'])) {
-                    if (! call_user_func($row_f['func_callback'], $value)) {
+                    if (!call_user_func($row_f['func_callback'], $value)) {
                         die(json_encode(array(
                             'status' => 'error',
                             'input' => 'custom_fields[' . $row_f['field'] . ']',
@@ -126,7 +126,7 @@ foreach ($array_field_config as $row_f) {
             $allowed_html_tags = '<' . implode('><', $allowed_html_tags) . '>';
             $value = strip_tags($value, $allowed_html_tags);
             if ($row_f['match_type'] == 'regex') {
-                if (! preg_match('/' . $row_f['match_regex'] . '/', $value)) {
+                if (!preg_match('/' . $row_f['match_regex'] . '/', $value)) {
                     die(json_encode(array(
                         'status' => 'error',
                         'input' => $row_f['field_type'] == 'editor' ? '' : 'custom_fields[' . $row_f['field'] . ']',
@@ -135,7 +135,7 @@ foreach ($array_field_config as $row_f) {
                 }
             } elseif ($row_f['match_type'] == 'callback') {
                 if (function_exists($row_f['func_callback'])) {
-                    if (! call_user_func($row_f['func_callback'], $value)) {
+                    if (!call_user_func($row_f['func_callback'], $value)) {
                         die(json_encode(array(
                             'status' => 'error',
                             'input' => $row_f['field_type'] == 'editor' ? '' : 'custom_fields[' . $row_f['field'] . ']',
@@ -171,7 +171,7 @@ foreach ($array_field_config as $row_f) {
 
             $value = implode(',', $temp_value);
         } elseif ($row_f['field_type'] == 'select' or $row_f['field_type'] == 'radio') {
-            if (! isset($row_f['field_choices'][$value])) {
+            if (!isset($row_f['field_choices'][$value])) {
                 die(json_encode(array(
                     'status' => 'error',
                     'input' => 'custom_fields[' . $row_f['field'] . ']',

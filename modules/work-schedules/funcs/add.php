@@ -8,8 +8,9 @@
  * @Createdate Sat, 11 Jun 2016 23:45:51 GMT
  */
 
-if (!defined('NV_MOD_WORK_SCHEDULES'))
+if (!defined('NV_MOD_WORK_SCHEDULES')) {
     die('Stop!!!');
+}
 
 $key_words = $description = 'no';
 
@@ -21,7 +22,7 @@ if (defined('NV_IS_MANAGER_ADMIN')) {
 
 /**
  * add_result()
- * 
+ *
  * @param mixed $array
  * @return
  */
@@ -41,7 +42,7 @@ if (!nv_user_in_groups($module_config[$module_name]['group_add']) and !defined('
 }
 
 $id = 0;
-$custom_fields = array();
+$custom_fields = [];
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
@@ -60,7 +61,7 @@ if (isset($array_op[1])) {
         }
 
         $array['event_textday'] = nv_date('d/m/Y', $array['e_time']);
-        
+
         foreach ($array_field_config as $field) {
             $custom_fields[$field['field']] = $array[$field['field']];
         }
@@ -72,7 +73,7 @@ if (isset($array_op[1])) {
         die();
     }
 } else {
-    $array = array(
+    $array = [
         'id' => 0,
         'e_day' => date('j'),
         'e_month' => date('n'),
@@ -86,14 +87,16 @@ if (isset($array_op[1])) {
         'event_textday' => '',
         'status' => defined('NV_IS_MANAGER_ADMIN') ? 1 : 2,
         'highlights' => 0
-    );
+    ];
 
     $form_action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 }
 
 if ($nv_Request->isset_request('event_textday', 'post')) {
     $custom_fields = $nv_Request->get_array('custom_fields', 'post');
-    
+
+    file_put_contents(NV_ROOTDIR . '/log.txt', print_r($custom_fields, true), FILE_APPEND);
+
     $array['event_textday'] = $nv_Request->get_string('event_textday', 'post', 0);
 
     $array['e_shour'] = $nv_Request->get_int('e_shour', 'post', -1);
@@ -112,84 +115,84 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
     // Bắt đầu kiểm tra
     unset($m);
     if (!preg_match("/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/", $array['event_textday'], $m)) {
-        die(add_result(array(
+        die(add_result([
             'status' => 'error',
             'input' => 'event_textday',
-            'mess' => $lang_module['ae_error_day1']))
-        );
+            'mess' => $lang_module['ae_error_day1']
+        ]));
     }
 
     if ($array['e_shour'] == -1) {
-        die(add_result(array(
+        die(add_result([
             'status' => 'error',
             'input' => 'e_shour',
-            'mess' => $lang_module['ae_error_hour']))
-        );
+            'mess' => $lang_module['ae_error_hour']
+        ]));
     }
 
     if ($array['e_shour'] < 0 or $array['e_shour'] > 23) {
-        die(add_result(array(
+        die(add_result([
             'status' => 'error',
             'input' => 'e_shour',
-            'mess' => $lang_module['ae_error_hour1']))
-        );
+            'mess' => $lang_module['ae_error_hour1']
+        ]));
     }
 
     if ($array['e_smin'] == -1) {
-        die(add_result(array(
+        die(add_result([
             'status' => 'error',
             'input' => 'e_smin',
-            'mess' => $lang_module['ae_error_min']))
-        );
+            'mess' => $lang_module['ae_error_min']
+        ]));
     }
 
     if ($array['e_smin'] < 0 or $array['e_smin'] > 59) {
-        die(add_result(array(
+        die(add_result([
             'status' => 'error',
             'input' => 'e_smin',
-            'mess' => $lang_module['ae_error_min1']))
-        );
+            'mess' => $lang_module['ae_error_min1']
+        ]));
     }
 
     if ($array['e_ehour'] < -1 or $array['e_ehour'] > 23) {
-        die(add_result(array(
+        die(add_result([
             'status' => 'error',
             'input' => 'e_ehour',
-            'mess' => $lang_module['ae_error_hour1']))
-        );
+            'mess' => $lang_module['ae_error_hour1']
+        ]));
     }
 
     if ($array['e_emin'] < -1 or $array['e_emin'] > 59) {
-        die(add_result(array(
+        die(add_result([
             'status' => 'error',
             'input' => 'e_emin',
-            'mess' => $lang_module['ae_error_min1']))
-        );
+            'mess' => $lang_module['ae_error_min1']
+        ]));
     }
 
     $array['e_time'] = mktime($array['e_shour'], $array['e_smin'], 0, $m[2], $m[1], $m[3]);
     $mintime_allow = mktime(0, 0, 0, date('n'), date('j'), date('Y')) + 86400;
 
     if ($array['e_time'] < $mintime_allow and !defined('NV_IS_MANAGER_ADMIN')) {
-        die(add_result(array(
+        die(add_result([
             'status' => 'error',
             'input' => 'event_textday',
-            'mess' => $lang_module['ae_error_day2']))
-        );
+            'mess' => $lang_module['ae_error_day2']
+        ]));
     }
 
     // Kiểm tra các trường dữ liệu
-    $query_field = array();
+    $query_field = [];
     if (!empty($array_field_config)) {
         require NV_ROOTDIR . '/modules/' . $module_file . '/fields.check.php';
     }
 
     if ($array['status'] < 0 or $array['status'] > 2) {
-        die(add_result(array(
+        die(add_result([
             'status' => 'error',
             'input' => 'status',
-            'mess' => $lang_module['ae_error_status']))
-        );
+            'mess' => $lang_module['ae_error_status']
+        ]));
     }
 
     // Mã bảo mật
@@ -202,11 +205,11 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
         $check_seccode = nv_capcha_txt($nv_seccode) ? true : false;
 
         if (!$check_seccode) {
-            die(add_result(array(
+            die(add_result([
                 'status' => 'error',
                 'input' => 'nv_seccode',
-                'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'])))
-            );
+                'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect'])
+            ]));
         }
     }
 
@@ -217,8 +220,8 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
     $array['e_year'] = date('Y', $array['e_time']);
 
     if ($id) {
-        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET 
-            edittime = ' . NV_CURRENTTIME . ', e_day = :e_day, e_month = :e_month, e_week = :e_week, e_year = :e_year, e_time = :e_time, e_shour = :e_shour, 
+        $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
+            edittime = ' . NV_CURRENTTIME . ', e_day = :e_day, e_month = :e_month, e_week = :e_week, e_year = :e_year, e_time = :e_time, e_shour = :e_shour,
             e_smin = :e_smin, e_ehour = :e_ehour, e_emin = :e_emin, status = :status, highlights = :highlights';
         foreach ($array_field_config as $field) {
             $sql .= ', ' . $field['field'] . ' = :' . $field['field'];
@@ -233,7 +236,7 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
         $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (
              post_id, addtime, edittime, e_day, e_month, e_week, e_year, e_time, e_shour, e_smin, e_ehour, e_emin, status, highlights' . $sql_key . '
         ) VALUES (
-            ' . $user_info['userid'] . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', :e_day, :e_month, :e_week, :e_year, :e_time, :e_shour, :e_smin, :e_ehour, :e_emin, 
+            ' . $user_info['userid'] . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', :e_day, :e_month, :e_week, :e_year, :e_time, :e_shour, :e_smin, :e_ehour, :e_emin,
             :status, :highlights' . $sql_value . '
         )';
     }
@@ -249,11 +252,11 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
         $sth->bindParam(':e_smin', $array['e_smin'], PDO::PARAM_INT);
         $sth->bindParam(':e_ehour', $array['e_ehour'], PDO::PARAM_INT);
         $sth->bindParam(':e_emin', $array['e_emin'], PDO::PARAM_INT);
-        
+
         foreach ($array_field_config as $field) {
             $sth->bindParam(':' . $field['field'], $query_field_values[$field['field']], PDO::PARAM_STR, strlen($query_field_values[$field['field']]));
         }
-        
+
         $sth->bindParam(':status', $array['status'], PDO::PARAM_INT);
         $sth->bindParam(':highlights', $array['highlights'], PDO::PARAM_INT);
         $sth->execute();
@@ -275,22 +278,22 @@ if ($nv_Request->isset_request('event_textday', 'post')) {
                 $message = $lang_module['ae_success'];
             }
 
-            die(add_result(array(
+            die(add_result([
                 'status' => 'ok',
                 'input' => '',
                 'redirect' => $redirect,
-                'mess' => $message))
-            );
+                'mess' => $message
+            ]));
         }
     } catch (PDOException $e) {
         trigger_error($e->getMessage());
     }
 
-    die(add_result(array(
+    die(add_result([
         'status' => 'error',
         'input' => '',
-        'mess' => $lang_module['errorsave']))
-    );
+        'mess' => $lang_module['errorsave']
+    ]));
 }
 
 $contents = nv_add_theme($array, $form_action, $module_config[$module_name], $array_field_config, $custom_fields);
