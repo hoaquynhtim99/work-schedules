@@ -19,6 +19,12 @@ if (defined('NV_IS_MANAGER_ADMIN')) {
 } else {
     $page_title = $lang_module['ae_pagetitle'];
 }
+if (!defined('NV_EDITOR')) {
+    define('NV_EDITOR', 'ckeditor');
+}
+if (defined('NV_EDITOR')) {
+    require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+}
 
 /**
  * add_result()
