@@ -2,16 +2,20 @@
 
 /**
  * @Project WORK SCHEDULES 4.X
- * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Author PHAN TAN DUNG <writeblabla@gmail.com>
  * @Copyright (C) 2016 PHAN TAN DUNG. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Sat, 11 Jun 2016 23:45:51 GMT
  */
 
-if (!defined('NV_MAINFILE'))
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
+}
 
-$global_array_show_type = array('week', 'all');
+$global_array_show_type = [
+    'week',
+    'all'
+];
 
 if ($module_config[$module_name]['auto_delete'] and (empty($module_config[$module_name]['cron_next_check']) or $module_config[$module_name]['cron_next_check'] <= NV_CURRENTTIME)) {
     // Xóa lịch
@@ -47,7 +51,10 @@ function nv_get_week_from_time($time)
 {
     $week = 1;
     $year = date('Y', $time);
-    $real_week = array($week, $year);
+    $real_week = [
+        $week,
+        $year
+    ];
 
     $time_per_week = 86400 * 7;
     $time_start_year = mktime(0, 0, 0, 1, 1, $year);

@@ -2,17 +2,21 @@
 
 /**
  * @Project WORK SCHEDULES 4.X
- * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Author PHAN TAN DUNG <writeblabla@gmail.com>
  * @Copyright (C) 2016 PHAN TAN DUNG. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Sat, 11 Jun 2016 23:45:51 GMT
  */
 
-if (!defined('NV_IS_FILE_MODULES'))
+if (!defined('NV_IS_FILE_MODULES')) {
     die('Stop!!!');
+}
 
-$sql_drop_module = array();
-$array_table = array('rows', 'field');
+$sql_drop_module = [];
+$array_table = [
+    'rows',
+    'field'
+];
 $table = $db_config['prefix'] . '_' . $lang . '_' . $module_data;
 $result = $db->query('SHOW TABLE STATUS LIKE ' . $db->quote($table . '_%'));
 while ($item = $result->fetch()) {

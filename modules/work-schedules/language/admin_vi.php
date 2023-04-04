@@ -2,17 +2,18 @@
 
 /**
  * @Project WORK SCHEDULES 4.X
- * @Author PHAN TAN DUNG (phantandung92@gmail.com)
+ * @Author PHAN TAN DUNG <writeblabla@gmail.com>
  * @Copyright (C) 2016 PHAN TAN DUNG. All rights reserved
  * @Language Tiếng Việt
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Sat, 11 Jun 2016 23:45:51 GMT
  */
 
-if (!defined('NV_ADMIN') or !defined('NV_MAINFILE'))
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
+}
 
-$lang_translator['author'] = 'PHAN TAN DUNG (phantandung92@gmail.com)';
+$lang_translator['author'] = 'PHAN TAN DUNG <writeblabla@gmail.com>';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2016 PHAN TAN DUNG. All rights reserved';
 $lang_translator['info'] = '';
@@ -28,6 +29,7 @@ $lang_module['function'] = 'Chức năng';
 $lang_module['order'] = 'Thứ tự';
 $lang_module['status'] = 'Hoạt động';
 $lang_module['save'] = 'Lưu lại';
+$lang_module['main_note'] = 'Để quản lý lịch, mời bạn nhấp vào đây';
 
 $lang_module['e_element'] = 'Thành phần';
 $lang_module['e_location'] = 'Địa điểm';
